@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#45aae6"/><stop offset="1" stop-color="#1d5fae"/></linearGradient>
+    <radialGradient id="shine" cx="0.45" cy="0.5" r="0.6"><stop offset="0" stop-color="#9ee8ff" stop-opacity="0.5"/><stop offset="1" stop-color="#9ee8ff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="pinkGlow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffaae6" stop-opacity="0.8"/><stop offset="1" stop-color="#ffaae6" stop-opacity="0"/></radialGradient>
+    <pattern id="grass" width="64" height="64" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#6fc56b"/><rect x="32" width="32" height="32" fill="#67bc63"/>
+      <rect y="32" width="32" height="32" fill="#67bc63"/><rect x="32" y="32" width="32" height="32" fill="#6fc56b"/>
+    </pattern>
+    <pattern id="dead" width="64" height="64" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#5e4c69"/><rect x="32" width="32" height="32" fill="#574663"/>
+      <rect y="32" width="32" height="32" fill="#574663"/><rect x="32" y="32" width="32" height="32" fill="#5e4c69"/>
+      <path d="M8 10l8 7-2 9M16 17l9-2M40 42l8 7-2 9M48 49l9-2" stroke="#2c1f38" stroke-opacity="0.6" stroke-width="2" fill="none"/>
+    </pattern>
+  </defs>
+  <rect width="640" height="360" fill="url(#sea)"/>
+  <rect width="640" height="360" fill="url(#shine)"/>
+  <g stroke="#ffffff" stroke-opacity="0.25" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M30 60q10-6 20 0M560 40q10-6 20 0M590 300q10-6 20 0M40 320q10-6 20 0M520 200q8-5 16 0"/>
+  </g>
+
+  <!-- island: shallow halo, cliff, grass, withered patch -->
+  <rect x="58" y="44" width="460" height="300" rx="40" fill="#bdeeff" fill-opacity="0.35"/>
+  <rect x="76" y="72" width="424" height="262" fill="#8a5d34"/>
+  <rect x="76" y="58" width="424" height="256" fill="url(#grass)"/>
+  <rect x="332" y="186" width="168" height="128" fill="url(#dead)"/>
+  <path d="M332 186h168M332 186v128" stroke="#c8aaff" stroke-opacity="0.45" stroke-width="3"/>
+  <rect x="76" y="58" width="424" height="256" fill="none" stroke="#f2d59a" stroke-width="7"/>
+
+  <!-- thorny trapped chest on withered land -->
+  <g opacity="0.7">
+    <rect x="388" y="232" width="56" height="30" fill="#7a5a4a" stroke="#2b1d36" stroke-width="3"/>
+    <path d="M388 234v-8c0-14 56-14 56 0v8z" fill="#8a6a58" stroke="#2b1d36" stroke-width="3"/>
+  </g>
+  <path d="M376 236c22 16 40-10 72 8M380 268c20-14 44 10 70-4" stroke="#2b1d36" stroke-width="4" fill="none"/>
+
+  <!-- three seedlings merging into a blossom -->
+  <g stroke="rgba(30,24,40,0.85)" stroke-width="3">
+    <ellipse cx="130" cy="146" rx="22" ry="8" fill="#8b5e3c"/>
+    <ellipse cx="130" cy="274" rx="22" ry="8" fill="#8b5e3c"/>
+    <ellipse cx="226" cy="274" rx="22" ry="8" fill="#8b5e3c"/>
+  </g>
+  <g stroke="rgba(30,24,40,0.85)" stroke-width="2.5">
+    <path d="M130 144v-18" stroke-width="4"/><ellipse cx="121" cy="125" rx="10" ry="4.5" fill="#7bd36b" transform="rotate(-28 121 125)"/><ellipse cx="139" cy="122" rx="10" ry="4.5" fill="#9be36d" transform="rotate(28 139 122)"/>
+    <path d="M130 272v-18" stroke-width="4"/><ellipse cx="121" cy="253" rx="10" ry="4.5" fill="#7bd36b" transform="rotate(-28 121 253)"/><ellipse cx="139" cy="250" rx="10" ry="4.5" fill="#9be36d" transform="rotate(28 139 250)"/>
+    <path d="M226 272v-18" stroke-width="4"/><ellipse cx="217" cy="253" rx="10" ry="4.5" fill="#7bd36b" transform="rotate(-28 217 253)"/><ellipse cx="235" cy="250" rx="10" ry="4.5" fill="#9be36d" transform="rotate(28 235 250)"/>
+  </g>
+  <path d="M146 160l26 34M152 268h44" stroke="#fde68a" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 10"/>
+  <circle cx="200" cy="196" r="58" fill="url(#pinkGlow)"/>
+  <ellipse cx="200" cy="226" rx="26" ry="9" fill="#8b5e3c" stroke="rgba(30,24,40,0.85)" stroke-width="3"/>
+  <path d="M200 224v-30" stroke="#2e9e57" stroke-width="5"/>
+  <g stroke="rgba(30,24,40,0.85)" stroke-width="3">
+    <ellipse cx="186" cy="212" rx="12" ry="5" fill="#4fd18b" transform="rotate(-28 186 212)"/>
+    <ellipse cx="214" cy="208" rx="12" ry="5" fill="#4fd18b" transform="rotate(28 214 208)"/>
+    <circle cx="200" cy="168" r="11" fill="#e255c8"/><circle cx="214" cy="178" r="11" fill="#e255c8"/><circle cx="209" cy="194" r="11" fill="#e255c8"/>
+    <circle cx="191" cy="194" r="11" fill="#e255c8"/><circle cx="186" cy="178" r="11" fill="#e255c8"/><circle cx="200" cy="184" r="9" fill="#fff3a0"/>
+  </g>
+
+  <!-- coin + egg -->
+  <g stroke="rgba(30,24,40,0.85)" stroke-width="3">
+    <ellipse cx="290" cy="112" rx="22" ry="20" fill="#d4961c"/><ellipse cx="290" cy="108" rx="22" ry="20" fill="#ffd23f"/>
+    <path d="M290 96l3.5 7.5 8 1-6 5.5 1.5 8-7-4-7 4 1.5-8-6-5.5 8-1z" fill="#d4961c" stroke="none"/>
+    <path d="M292 182c16 0 22 26 21 36-2 15-11 18-21 18s-19-3-21-18c-1-10 5-36 21-36z" fill="#8fe3c4"/>
+  </g>
+  <g fill="#3fae86"><circle cx="285" cy="200" r="5"/><circle cx="300" cy="212" r="6"/><circle cx="287" cy="224" r="4"/></g>
+
+  <!-- baby dragon flying -->
+  <g transform="translate(470 110)">
+    <circle r="70" fill="#fde68a" fill-opacity="0.18"/>
+    <g stroke="rgba(30,24,40,0.85)" stroke-width="3.5" stroke-linejoin="round">
+      <path d="M-14-8c-8-30-36-44-54-36l10 14-10 12 14 6-6 12c18 2 36-2 46-8z" fill="#2fa77a"/>
+      <path d="M14-8c8-30 36-44 54-36l-10 14 10 12-14 6 6 12c-18 2-36-2-46-8z" fill="#2fa77a"/>
+      <path d="M-18 26c-26 8-34-12-28-24" fill="none" stroke-width="12"/>
+      <path d="M-18 26c-26 8-34-12-28-24" fill="none" stroke="#5fd3a0" stroke-width="7"/>
+      <ellipse cx="0" cy="22" rx="27" ry="23" fill="#5fd3a0"/>
+      <ellipse cx="2" cy="27" rx="15" ry="14" fill="#d9fbe9" stroke="none"/>
+      <path d="M-14-30l-8-22 16 16zM18-34l10-20v24z" fill="#fff3c4"/>
+      <circle cx="4" cy="-14" r="24" fill="#5fd3a0"/>
+      <ellipse cx="16" cy="-5" rx="12" ry="9" fill="#d9fbe9" stroke="none"/>
+      <ellipse cx="-4" cy="-19" rx="7" ry="8" fill="#ffffff"/><ellipse cx="14" cy="-20" rx="6.5" ry="7.5" fill="#ffffff"/>
+    </g>
+    <circle cx="-2" cy="-18" r="4" fill="#24203a"/><circle cx="15" cy="-19" r="3.8" fill="#24203a"/>
+    <circle cx="-1" cy="-20" r="1.5" fill="#fff"/><circle cx="16" cy="-21" r="1.4" fill="#fff"/>
+    <ellipse cx="-12" cy="-6" rx="5" ry="3" fill="#ff8aa6" fill-opacity="0.6"/>
+  </g>
+  <g fill="#ffffff">
+    <path d="M560 200l4 11 11 4-11 4-4 11-4-11-11-4 11-4z"/>
+    <path d="M396 60l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/>
+    <path d="M250 150l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>
+  </g>
+  <g fill="#fef08a"><circle cx="420" cy="170" r="4"/><circle cx="436" cy="182" r="3"/><circle cx="410" cy="190" r="2.5"/></g>
+</svg>

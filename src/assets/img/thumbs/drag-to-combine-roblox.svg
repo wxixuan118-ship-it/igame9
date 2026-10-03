@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#2a1458"/>
+      <stop offset="0.6" stop-color="#160c33"/>
+      <stop offset="1" stop-color="#0a0718"/>
+    </linearGradient>
+    <radialGradient id="neb" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="#b06cff" stop-opacity="0.35"/><stop offset="1" stop-color="#b06cff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gGold" cx="0.5" cy="0.5" r="0.5"><stop offset="0.45" stop-color="#fbbf24" stop-opacity="0.75"/><stop offset="1" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gGreen" cx="0.5" cy="0.5" r="0.5"><stop offset="0.5" stop-color="#4ade80" stop-opacity="0.6"/><stop offset="1" stop-color="#4ade80" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gBlue" cx="0.5" cy="0.5" r="0.5"><stop offset="0.5" stop-color="#38bdf8" stop-opacity="0.6"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gPink" cx="0.5" cy="0.5" r="0.5"><stop offset="0.5" stop-color="#fb7185" stop-opacity="0.6"/><stop offset="1" stop-color="#fb7185" stop-opacity="0"/></radialGradient>
+    <radialGradient id="orbD" cx="0.42" cy="0.36" r="0.7"><stop offset="0" stop-color="#3a2a70"/><stop offset="0.8" stop-color="#140c2c"/><stop offset="1" stop-color="#07040f"/></radialGradient>
+    <radialGradient id="altar" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#3a2470"/><stop offset="1" stop-color="#1c1240"/></radialGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <rect width="640" height="360" fill="url(#neb)"/>
+  <g fill="#ffffff">
+    <circle cx="40" cy="30" r="1.6" opacity="0.7"/><circle cx="120" cy="64" r="1.2" opacity="0.5"/><circle cx="210" cy="22" r="1.8" opacity="0.8"/>
+    <circle cx="560" cy="40" r="1.6" opacity="0.7"/><circle cx="600" cy="120" r="1.2" opacity="0.5"/><circle cx="470" cy="18" r="1.4" opacity="0.6"/>
+    <circle cx="30" cy="200" r="1.4" opacity="0.6"/><circle cx="610" cy="250" r="1.8" opacity="0.7"/><circle cx="90" cy="320" r="1.2" opacity="0.5"/>
+    <circle cx="540" cy="330" r="1.4" opacity="0.6"/><circle cx="380" cy="30" r="1.2" opacity="0.5"/><circle cx="260" cy="340" r="1.4" opacity="0.5"/>
+  </g>
+
+  <!-- fusion altar -->
+  <ellipse cx="320" cy="300" rx="150" ry="44" fill="url(#gGold)"/>
+  <ellipse cx="320" cy="296" rx="118" ry="34" fill="url(#altar)" stroke="#fbbf24" stroke-width="5"/>
+  <ellipse cx="320" cy="296" rx="86" ry="24" fill="none" stroke="#fbbf24" stroke-opacity="0.55" stroke-width="2.5"/>
+  <g stroke="#fde68a" stroke-width="3" stroke-linecap="round" opacity="0.85">
+    <path d="M222 290l-10-2M418 290l10-2M250 316l-8 5M390 316l8 5M320 322v8M276 274l-6-5M364 274l6-5"/>
+  </g>
+
+  <!-- legendary aura -->
+  <circle cx="320" cy="168" r="112" fill="url(#gGold)"/>
+  <g fill="#fbbf24">
+    <path d="M320 70l8 26h-16z"/><path d="M320 266l-8-26h16z"/><path d="M222 168l26-8v16z"/><path d="M418 168l-26 8v-16z"/>
+    <path d="M251 99l24 13-11 11z"/><path d="M389 237l-24-13 11-11z"/><path d="M389 99l-13 24-11-11z"/><path d="M251 237l13-24 11 11z"/>
+  </g>
+  <circle cx="320" cy="168" r="74" fill="url(#orbD)" stroke="#fbbf24" stroke-width="7"/>
+  <circle cx="320" cy="168" r="64" fill="none" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/>
+  <!-- glowing whale glyph -->
+  <g transform="translate(272 128) scale(0.96)">
+    <path d="M10 58C10 34 44 28 64 42c8 4 14 4 20-2l10-12-4 20 6 16-16-8c-10 18-40 24-56 18C14 70 10 64 10 58z" fill="#3a9dff" stroke="#c8f6ff" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M16 64c14 10 36 10 50-4-12 20-40 20-50 4z" fill="#3affe0"/>
+    <circle cx="26" cy="52" r="3.5" fill="#0a1033"/>
+    <path d="M38 30c-4-12-12-16-12-16M38 30c4-14 12-18 12-18" fill="none" stroke="#9ff3ff" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- ingredient auras -->
+  <circle cx="118" cy="132" r="64" fill="url(#gGreen)"/>
+  <circle cx="118" cy="132" r="42" fill="url(#orbD)" stroke="#4ade80" stroke-width="5"/>
+  <path d="M90 136c6-10 14-10 18 0 6-10 14-10 18 0 6-10 12-10 16-2v18H90z" fill="#2f6bff" stroke="#d6e6ff" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="522" cy="132" r="64" fill="url(#gBlue)"/>
+  <circle cx="522" cy="132" r="42" fill="url(#orbD)" stroke="#38bdf8" stroke-width="5"/>
+  <path d="M522 132m-22 0a22 18 0 1 0 44 0a14 12 0 1 0-28 0a7 6 0 1 0 14 0" fill="none" stroke="#5fd0ff" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="150" cy="282" r="44" fill="url(#gPink)"/>
+  <circle cx="150" cy="282" r="28" fill="url(#orbD)" stroke="#fb7185" stroke-width="4"/>
+  <path d="M150 268l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="#ffe8a3"/>
+  <circle cx="492" cy="282" r="44" fill="url(#gPink)"/>
+  <circle cx="492" cy="282" r="28" fill="url(#orbD)" stroke="#c084fc" stroke-width="4"/>
+  <path d="M482 272c8-6 22 0 18 10-3 8-15 8-18 2" fill="none" stroke="#e8f0ff" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- fusion trails -->
+  <g fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12">
+    <path d="M166 120c40-20 70-10 92 14" stroke="#86efac"/>
+    <path d="M474 120c-40-20-70-10-92 14" stroke="#7dd3fc"/>
+  </g>
+  <g fill="#ffffff">
+    <path d="M238 70l3 9 9 3-9 3-3 9-3-9-9-3 9-3z"/>
+    <path d="M410 64l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/>
+    <path d="M430 222l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>
+  </g>
+</svg>

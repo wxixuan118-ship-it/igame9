@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d1117"/><stop offset="1" stop-color="#010409"/></linearGradient>
+    <radialGradient id="g1" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#3fb950" stop-opacity=".45"/><stop offset="1" stop-color="#3fb950" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <!-- night skyline -->
+  <g fill="#141b2d">
+    <rect x="0" y="120" width="48" height="90"/><rect x="54" y="92" width="38" height="118"/><rect x="98" y="130" width="52" height="80"/><rect x="156" y="104" width="36" height="106"/><rect x="198" y="140" width="40" height="70"/>
+  </g>
+  <g fill="#ffd678" opacity=".7"><rect x="62" y="104" width="4" height="4"/><rect x="74" y="122" width="4" height="4"/><rect x="164" y="118" width="4" height="4"/><rect x="176" y="140" width="4" height="4"/><rect x="12" y="140" width="4" height="4"/><rect x="110" y="150" width="4" height="4"/><rect x="210" y="156" width="4" height="4"/></g>
+  <g fill="#fff" opacity=".6"><rect x="30" y="30" width="2" height="2"/><rect x="120" y="52" width="2" height="2"/><rect x="200" y="24" width="2" height="2"/><rect x="88" y="70" width="2" height="2"/></g>
+  <rect x="0" y="210" width="640" height="150" fill="#0c1018"/>
+  <rect x="0" y="210" width="640" height="4" fill="#000" opacity=".4"/>
+  <!-- terminal window -->
+  <rect x="262" y="22" width="360" height="190" rx="12" fill="#010409" stroke="#30363d" stroke-width="2"/>
+  <circle cx="284" cy="42" r="6" fill="#f85149"/><circle cx="302" cy="42" r="6" fill="#d29922"/><circle cx="320" cy="42" r="6" fill="#3fb950"/>
+  <g font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="700" font-size="16">
+    <text x="280" y="76" fill="#8b949e">$ npm start</text>
+    <text x="280" y="102" fill="#c9d1d9"><tspan fill="#d29922">a41f9c2</tspan> feat: dark mode</text>
+    <text x="280" y="128" fill="#c9d1d9"><tspan fill="#d29922">7c3e9a1</tspan> fix: invoices</text>
+    <text x="280" y="154" fill="#58a6ff">$ git merge feature/api</text>
+    <text x="280" y="180" fill="#3fb950">$ deploy --env=ipo  ✔</text>
+  </g>
+  <rect x="280" y="190" width="11" height="16" fill="#3fb950"/>
+  <!-- founder desk -->
+  <g transform="translate(150 290)">
+    <ellipse cx="0" cy="56" rx="100" ry="12" fill="#000" opacity=".5"/>
+    <circle cx="0" cy="-74" r="110" fill="url(#g1)"/>
+    <path d="M-88 -30H88L104 0H-104z" fill="#2a313d"/><rect x="-104" y="0" width="208" height="14" fill="#1c222c"/><rect x="-94" y="14" width="10" height="48" fill="#1c222c"/><rect x="84" y="14" width="10" height="48" fill="#1c222c"/>
+    <rect x="-62" y="-116" width="124" height="80" rx="7" fill="#111318"/><rect x="-56" y="-110" width="112" height="68" fill="#0d1117"/>
+    <rect x="-46" y="-100" width="62" height="6" fill="#3fb950"/><rect x="-38" y="-87" width="80" height="6" fill="#58a6ff"/><rect x="-38" y="-74" width="46" height="6" fill="#d2a8ff"/><rect x="-46" y="-61" width="68" height="6" fill="#ffa657"/>
+    <rect x="-42" y="4" width="84" height="70" rx="30" fill="#f78166"/><circle cx="0" cy="-14" r="28" fill="#2b1a10"/><rect x="-38" y="38" width="76" height="38" rx="10" fill="#0b0e13"/>
+  </g>
+  <!-- contribution graph -->
+  <g transform="translate(290 236)">
+    <rect x="-12" y="-12" width="344" height="110" rx="10" fill="#0d1117" stroke="#30363d" stroke-width="2"/>
+    <g fill="#161b22">
+      <rect x="0" y="0" width="16" height="16" rx="3"/><rect x="0" y="20" width="16" height="16" rx="3"/><rect x="0" y="40" width="16" height="16" rx="3"/><rect x="0" y="60" width="16" height="16" rx="3"/>
+      <rect x="20" y="20" width="16" height="16" rx="3"/><rect x="40" y="0" width="16" height="16" rx="3"/><rect x="60" y="60" width="16" height="16" rx="3"/><rect x="100" y="40" width="16" height="16" rx="3"/><rect x="140" y="0" width="16" height="16" rx="3"/><rect x="180" y="20" width="16" height="16" rx="3"/>
+    </g>
+    <g fill="#0e4429"><rect x="20" y="0" width="16" height="16" rx="3"/><rect x="40" y="40" width="16" height="16" rx="3"/><rect x="60" y="20" width="16" height="16" rx="3"/><rect x="80" y="60" width="16" height="16" rx="3"/><rect x="120" y="20" width="16" height="16" rx="3"/><rect x="160" y="40" width="16" height="16" rx="3"/><rect x="200" y="0" width="16" height="16" rx="3"/></g>
+    <g fill="#006d32"><rect x="20" y="40" width="16" height="16" rx="3"/><rect x="40" y="20" width="16" height="16" rx="3"/><rect x="80" y="0" width="16" height="16" rx="3"/><rect x="100" y="20" width="16" height="16" rx="3"/><rect x="140" y="40" width="16" height="16" rx="3"/><rect x="180" y="60" width="16" height="16" rx="3"/><rect x="220" y="20" width="16" height="16" rx="3"/><rect x="240" y="60" width="16" height="16" rx="3"/></g>
+    <g fill="#26a641"><rect x="60" y="0" width="16" height="16" rx="3"/><rect x="80" y="20" width="16" height="16" rx="3"/><rect x="120" y="60" width="16" height="16" rx="3"/><rect x="160" y="0" width="16" height="16" rx="3"/><rect x="200" y="40" width="16" height="16" rx="3"/><rect x="240" y="0" width="16" height="16" rx="3"/><rect x="260" y="40" width="16" height="16" rx="3"/></g>
+    <g fill="#39d353"><rect x="100" y="0" width="16" height="16" rx="3"/><rect x="140" y="20" width="16" height="16" rx="3"/><rect x="180" y="0" width="16" height="16" rx="3"/><rect x="220" y="40" width="16" height="16" rx="3"/><rect x="260" y="0" width="16" height="16" rx="3"/><rect x="260" y="20" width="16" height="16" rx="3"/><rect x="280" y="0" width="16" height="16" rx="3"/><rect x="280" y="40" width="16" height="16" rx="3"/><rect x="300" y="20" width="16" height="16" rx="3"/><rect x="300" y="60" width="16" height="16" rx="3"/></g>
+  </g>
+  <!-- HUD -->
+  <text x="22" y="52" font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="900" font-size="36" fill="#fff">$12.2B</text>
+  <text x="24" y="76" font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="800" font-size="17" fill="#3fb950">+$86.1M/s</text>
+  <text x="96" y="168" font-family="ui-monospace,Menlo,Consolas,monospace" font-weight="900" font-size="24" fill="#56d364" stroke="#000" stroke-width="4" paint-order="stroke">+$3.4K</text>
+</svg>
