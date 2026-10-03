@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+<rect width="640" height="360" fill="#7cc455"/>
+<path d="M0 0H250Q220 120 300 180Q200 260 0 250Z" fill="#4f9a48"/>
+<path d="M640 0H420Q470 110 380 170Q470 250 640 230Z" fill="#eef3f8"/>
+<path d="M0 250Q200 260 300 180Q360 260 640 230V360H0Z" fill="#e8cf8a"/>
+<g fill="#5aa63e"><rect x="290" y="120" width="8" height="8"/><rect x="340" y="210" width="8" height="8"/><rect x="250" y="190" width="8" height="8"/></g>
+<g fill="#fde047"><rect x="320" y="150" width="7" height="7"/><rect x="270" y="230" width="7" height="7"/></g>
+<g><rect x="60" y="80" width="12" height="40" fill="#6b4a2e"/><circle cx="66" cy="66" r="30" fill="#2f7d3a"/><circle cx="56" cy="56" r="16" fill="#3f9a48"/><rect x="160" y="40" width="10" height="34" fill="#6b4a2e"/><circle cx="165" cy="30" r="24" fill="#2f7d3a"/></g>
+<g><polygon points="560,20 590,70 530,70" fill="#2f6b55"/><polygon points="560,45 595,100 525,100" fill="#255544"/><polygon points="560,20 572,40 548,40" fill="#fff"/><polygon points="480,60 505,100 455,100" fill="#2a5f4c"/><polygon points="480,60 490,76 470,76" fill="#fff"/></g>
+<g><rect x="72" y="270" width="12" height="70" rx="6" fill="#4f9a4a"/><rect x="54" y="290" width="10" height="28" rx="5" fill="#4f9a4a"/><rect x="92" y="282" width="10" height="26" rx="5" fill="#4f9a4a"/><circle cx="78" cy="268" r="5" fill="#f472b6"/></g>
+<ellipse cx="330" cy="300" rx="110" ry="14" fill="rgba(0,0,0,0.18)"/>
+<g transform="translate(220 150) scale(2.6)">
+<ellipse cx="18" cy="26" rx="13" ry="6" fill="#d9d9d4" transform="rotate(-25 18 26)"/>
+<ellipse cx="11" cy="22" rx="5" ry="4" fill="#eef2f6" transform="rotate(-25 11 22)"/>
+<rect x="22" y="44" width="7" height="11" fill="#c9c9c2"/><rect x="45" y="44" width="7" height="11" fill="#c9c9c2"/>
+<ellipse cx="36" cy="38" rx="23" ry="15" fill="#e8dcd2"/>
+<ellipse cx="39" cy="44" rx="15" ry="7" fill="#f6efe8"/>
+<rect x="26" y="44" width="7" height="12" fill="#e8dcd2"/><rect x="47" y="44" width="7" height="12" fill="#e8dcd2"/>
+<polygon points="48,29 50,13 58,25" fill="#ea7a3a"/><polygon points="56,27 61,11 66,27" fill="#ea7a3a"/><polygon points="58,25 61,17 64,25" fill="#b85a2a"/>
+<ellipse cx="57" cy="33" rx="11" ry="9" fill="#ea7a3a"/>
+<polygon points="61,29 77,36 61,41" fill="#ea7a3a"/><polygon points="55,35 75,37 59,42" fill="#fff3e6"/>
+<circle cx="76" cy="35" r="2.3" fill="#2a2024"/>
+<ellipse cx="61" cy="30" rx="2.8" ry="3.1" fill="#fff"/><circle cx="62" cy="30.5" r="1.7" fill="#1d1a22"/>
+</g>
+<g transform="translate(470 210) scale(1.4)">
+<ellipse cx="30" cy="40" rx="17" ry="14" fill="#62c04e"/><ellipse cx="44" cy="22" rx="14" ry="10" fill="#62c04e"/><circle cx="40" cy="13" r="6" fill="#62c04e"/><circle cx="50" cy="13" r="6" fill="#62c04e"/><circle cx="40" cy="12" r="3.4" fill="#fff"/><circle cx="50" cy="12" r="3.4" fill="#fff"/><circle cx="41" cy="12" r="2" fill="#1d1a22"/><circle cx="51" cy="12" r="2" fill="#1d1a22"/>
+<polygon points="34,6 34,-4 39,1 44,-6 49,1 54,-4 54,6" fill="#fbbf24"/>
+</g>
+<g transform="translate(120 170)"><circle cx="20" cy="20" r="18" fill="#a78bfa"/><path d="M12 8 Q28 20 12 32 M28 8 Q12 20 28 32" stroke="#fff" stroke-width="3" fill="none"/></g>
+<g font-family="system-ui, Arial, sans-serif" font-weight="900" text-anchor="middle">
+<text x="320" y="62" font-size="44" fill="#fff" stroke="#14532d" stroke-width="6" paint-order="stroke">WILD SPLICE</text>
+<text x="330" y="132" font-size="20" fill="#fff" stroke="#14532d" stroke-width="4" paint-order="stroke">FOX + POLAR BEAR</text>
+</g>
+</svg>

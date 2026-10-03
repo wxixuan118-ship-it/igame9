@@ -9,21 +9,32 @@ import { site } from '../data/site.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const AUDIT = process.env.ONPAGE_AUDIT || path.join(os.homedir(), '.claude/skills/onpage-audit/scripts/onpage_audit.py');
-const OUT = path.resolve(process.argv[2] || path.join(os.tmpdir(), 'igame9-audit'));
-const only = new Set(process.argv.slice(3));
+// node scripts/audit-all.mjs [outDir] [slug …] [--dist <builtDir>]
+const argv = process.argv.slice(2);
+const distIdx = argv.indexOf('--dist');
+const DIST = distIdx > -1 ? path.resolve(argv.splice(distIdx, 2)[1]) : path.join(ROOT, 'dist');
+const OUT = path.resolve(argv[0] || path.join(os.tmpdir(), 'igame9-audit'));
+const only = new Set(argv.slice(1));
 const HUB_KEYWORD = 'free online games';
 fs.mkdirSync(OUT, { recursive: true });
 
-const targets = [{ slug: '', keyword: HUB_KEYWORD, file: path.join(ROOT, 'dist/index.html') }];
+const targets = [{ slug: '', keyword: HUB_KEYWORD, file: path.join(DIST, 'index.html') }];
 for (const f of fs.readdirSync(path.join(ROOT, 'data/pages')).filter((f) => f.endsWith('.mjs') && !f.startsWith('_'))) {
-  const p = (await import(pathToFileURL(path.join(ROOT, 'data/pages', f)).href)).default;
-  if (p && p.slug && !p.draft) targets.push({ slug: p.slug, keyword: p.keyword, file: path.join(ROOT, 'dist', p.slug, 'index.html') });
+  let p;
+  try {
+    p = (await import(pathToFileURL(path.join(ROOT, 'data/pages', f)).href)).default;
+  } catch (e) {
+    console.warn(`skip ${f}: ${e.message}`);
+    continue;
+  }
+  if (p && p.slug && !p.draft) targets.push({ slug: p.slug, keyword: p.keyword, file: path.join(DIST, p.slug, 'index.html') });
 }
 
 const rows = [];
 for (const t of targets) {
   const name = t.slug || 'hub';
   if (only.size && !only.has(name)) continue;
+  if (!fs.existsSync(t.file)) continue;
   const url = `${site.url}/${t.slug ? t.slug + '/' : ''}`;
   const json = path.join(OUT, `${name}.json`);
   const r = spawnSync('python3', [AUDIT, t.file, '-k', t.keyword, '--url', url, '--json', json, '--quiet-ngrams'], { encoding: 'utf8' });

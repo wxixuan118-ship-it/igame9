@@ -24,8 +24,8 @@ serve.mjs                npm run serve → http://localhost:4173
 | `/war-mahjong/` | War Mahjong | 2400 / 22 | `tile-war` | Frontline Tiles |
 | `/idle-startup-tycoon/` | Idle Startup Tycoon | 1600 / 29 | `startup-idle` | Garage to Unicorn |
 | `/crazy-shooters/` | Crazy Shooters | 1300 / 28 | `arena-shooters` | Hexfire Arena |
-| `/drag-to-combine-roblox/` | Drag to Combine Roblox | 1000 / 23 | `element-craft` (auras) | Aura Forge |
 | `/drag-to-combine/` | Drag to Combine | 1000 / 29 | `element-craft` (elements) | Elementa |
+| `/drag-to-combine-roblox/` | Drag to Combine Roblox | 1000 / 23 | `element-craft` (auras) | Aura Forge |
 | `/drift-boss/` | Drift Boss | 1000 / 21 | `edge-drift` | Edge Drift |
 | `/temple-run-3/` | Temple Run 3 | 590 / 29 | `temple-dash` (temple) | Jungle Relic Dash |
 | `/temple-run-oz/` | Temple Run Oz | 480 / 26 | `temple-dash` (oz) | Emerald Road Dash |
@@ -40,6 +40,19 @@ serve.mjs                npm run serve → http://localhost:4173
 | `/idle-guy/` | Idle Guy | 140 / 21 | `life-idle` | Life Ladder |
 | `/run3d/` | Run3D | 140 / 18 | `void-runner` | Star Tunnel Runner |
 | `/sprinters/` | Sprinters | 140 / 23 | `sprint-100` | Photo Finish |
+| `/140-game/` | 140 | 0 / 0 | `beat-platformer` | Offbeat |
+| `/animal-craft-game/` | Animal Craft Game | 0 / 0 | `beast-fusion` | Wild Splice |
+| `/army-of-ages/` | Army of Ages | 0 / 0 | `age-siege` | Epoch Siege |
+| `/blood-dos-game/` | Blood DOS Game | 0 / 0 | `crypt-shooter` (crypt) | Gravewick |
+| `/bloons-td-5-unblocked/` | Bloons TD 5 Unblocked | 0 / 0 | `pop-defense` (five) | Critter Pop TD: Grand Garden |
+| `/bloons-td-unblocked/` | Bloons TD Unblocked | 0 / 0 | `pop-defense` (classic) | Critter Pop TD |
+| `/extreme-run-3d/` | Extreme Run 3D | 0 / 0 | `neon-roll` | Neon Orb Rush |
+| `/ragdoll-archers-unblocked/` | Ragdoll Archers Unblocked | 0 / 0 | `ragdoll-bow` | Quiver Clash |
+| `/stick-fight-unblocked/` | Stick Fight Unblocked | 0 / 0 | `stick-brawl` | Wobble Brawl |
+| `/stick-fighter-unblocked/` | Stick Fighter Unblocked | 0 / 0 | `stick-duel` | Inkfist Duel |
+| `/stickman-unblocked/` | Stickman Unblocked | 0 / 0 | `stick-swing` | Skyline Swing |
+| `/tralalero-tralala-clicker/` | Tralalero Tralala Clicker | 0 / 0 | `brainrot-clicker` | Assurdo Clicker |
+| `/zelda-heardle/` | Zelda Heardle | 0 / 0 | `tune-guess` | Clipsody |
 
 ## Commands
 

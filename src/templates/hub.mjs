@@ -97,7 +97,7 @@ ${header()}
 <main id="main" class="wrap">
   <section class="hub-hero">
     <h1>Free online games you can <span>play instantly</span></h1>
-    <p>${pages.length} hand-built free online games — idle tycoons, cliff-edge drifting, temple runners, two-layer mahjong, merge and physics puzzles — no download, no login, on desktop, Chromebook and mobile.</p>
+    <p>${pages.length} hand-built free online games — tower defense, stickman fights, idle tycoons, cliff-edge drifting, temple runners, two-layer mahjong, merge and physics puzzles — no download, no login, on desktop, Chromebook and mobile.</p>
     <div class="search" role="search">
       ${icons.search}
       <label class="sr-only" for="q">Search games</label>

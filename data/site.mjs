@@ -6,7 +6,7 @@ export const site = {
   lang: 'en',
   tagline: 'Free browser games — no download, no login',
   description:
-    'Play free online games on igame9: idle tycoons, drifting, temple runners, mahjong, merge and physics puzzles. No download or login, on desktop or mobile.',
+    'Play free online games on igame9: tower defense, stickman fights, idle tycoons, drifting, runners, mahjong and puzzles. No download or login, on any device.',
   themeColor: '#0b0d17',
 };
 
@@ -43,6 +43,22 @@ export const categories = {
     icon: '🧩',
     blurb:
       'Brain games for short breaks: two-layer mahjong, element crafting, dragon merging and draw-a-line physics puzzles.',
+  },
+  strategy: {
+    name: 'Strategy & Tower Defense',
+    h2: 'Strategy & tower defense games',
+    short: 'Strategy',
+    icon: '🏰',
+    blurb:
+      'Plan, build and outlast: balloon-popping tower defense and age-to-age lane battles where every coin and upgrade decides the war.',
+  },
+  stickman: {
+    name: 'Stickman Games',
+    h2: 'Stickman games',
+    short: 'Stickman',
+    icon: '🥢',
+    blurb:
+      'Stick-figure physics at its best — ragdoll archery duels, chaotic brawls, combo fighting and rope-swinging stickman runs.',
   },
   action: {
     name: 'Action & Sports',
