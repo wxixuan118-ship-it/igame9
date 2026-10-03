@@ -4,14 +4,13 @@ import { payment, subscription } from "@starter/db/schema/payment";
 import { game } from "@starter/db/schema/game";
 import { and, desc, eq } from "drizzle-orm";
 import { z } from "zod";
-import { createCheckout, listingProduct, products } from "@starter/auth/payments";
+import { createListingCheckout } from "@starter/auth/payments";
 import { ORPCError } from "@orpc/server";
 import { gameInput, submitGame, updateGame } from "../games";
 import { protectedProcedure, publicProcedure } from "../index";
 export const appRouter = {
   health: publicProcedure.handler(() => "OK"),
   me: protectedProcedure.handler(({ context }) => context.session.user),
-  products: publicProcedure.handler(() => products),
   payments: protectedProcedure.handler(({ context }) =>
     db
       .select()
@@ -26,11 +25,6 @@ export const appRouter = {
       .where(eq(subscription.userId, context.session.user.id))
       .orderBy(desc(subscription.updatedAt)),
   ),
-  checkout: protectedProcedure
-    .input(z.object({ productId: z.string().min(1) }))
-    .handler(({ input, context }) =>
-      createCheckout(context.session.user.id, context.session.user.email, input.productId),
-    ),
   games: {
     mine: protectedProcedure.handler(({ context }) =>
       db
@@ -51,7 +45,7 @@ export const appRouter = {
       .handler(async ({ input, context }) => {
         const userId = context.session.user.id;
         const [row] = await db
-          .select({ id: game.id })
+          .select({ id: game.id, title: game.title })
           .from(game)
           .where(
             and(
@@ -62,13 +56,7 @@ export const appRouter = {
           )
           .limit(1);
         if (!row) throw new ORPCError("NOT_FOUND");
-        if (!listingProduct)
-          throw new ORPCError("PRECONDITION_FAILED", {
-            message: "Paid listing is not configured.",
-          });
-        return createCheckout(userId, context.session.user.email, listingProduct.id, {
-          gameId: row.id,
-        });
+        return createListingCheckout(userId, context.session.user.email, row.id, row.title);
       }),
   },
 };

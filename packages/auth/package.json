@@ -9,10 +9,10 @@
   "dependencies": {
     "@starter/db": "workspace:*",
     "@starter/env": "workspace:*",
-    "@waffo/pancake-ts": "^0.20.0",
     "better-auth": "catalog:",
     "drizzle-orm": "^0.45.2",
     "resend": "catalog:",
+    "stripe": "^23.0.0",
     "zod": "catalog:"
   }
 }

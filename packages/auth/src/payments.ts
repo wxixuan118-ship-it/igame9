@@ -1,137 +1,125 @@
 import { db } from "@starter/db";
-import { payment, subscription, webhookEvent } from "@starter/db/schema/payment";
+import { payment, webhookEvent } from "@starter/db/schema/payment";
 import { user } from "@starter/db/schema/auth";
 import { game } from "@starter/db/schema/game";
 import { env } from "@starter/env/server";
-import { WaffoPancake, WebhookEventType, type WebhookEvent } from "@waffo/pancake-ts";
 import { and, eq } from "drizzle-orm";
-import { z } from "zod";
+import Stripe from "stripe";
 
-const productSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1),
-  type: z.enum(["onetime", "subscription"]),
-});
-export const products = z.array(productSchema).parse(JSON.parse(env.WAFFO_PRODUCTS));
-export const waffoClient = new WaffoPancake({
-  merchantId: env.WAFFO_MERCHANT_ID,
-  privateKey: env.WAFFO_PRIVATE_KEY,
-  environment: env.WAFFO_ENVIRONMENT,
-});
-/** One-time product sold as a featured listing. */
-export const listingProduct = products.find((x) => x.type === "onetime");
-export async function createCheckout(
+export const stripe = new Stripe(env.STRIPE_SECRET_KEY);
+const LISTING_NAME = "Featured game listing";
+const listingCents = Math.round(Number(env.FEATURED_LISTING_PRICE_USD) * 100);
+if (!Number.isInteger(listingCents) || listingCents < 50)
+  throw new Error("FEATURED_LISTING_PRICE_USD must be a USD amount of at least 0.50");
+
+/** One-time Stripe Checkout for a featured listing; the webhook publishes the game. */
+export async function createListingCheckout(
   userId: string,
   email: string,
-  productId: string,
-  extra: Record<string, string> = {},
+  gameId: string,
+  gameTitle: string,
 ) {
-  const product = products.find((x) => x.id === productId);
-  if (!product) throw new Error("Unknown product");
-  const result = await waffoClient.checkout.authenticated.create({
-    productId: product.id,
-    currency: "USD",
-    buyerIdentity: userId,
-    buyerEmail: email,
-    successUrl: env.WAFFO_SUCCESS_URL,
-    metadata: { ...extra, userId, productId: product.id },
-    orderMerchantExternalId: `${userId}:${crypto.randomUUID()}`,
+  const origin = env.BETTER_AUTH_URL.replace(/\/$/, "");
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    customer_email: email,
+    client_reference_id: userId,
+    line_items: [
+      {
+        quantity: 1,
+        price_data: {
+          currency: "usd",
+          unit_amount: listingCents,
+          product_data: {
+            name: LISTING_NAME,
+            description: gameTitle.slice(0, 200),
+            // Required by Stripe Managed Payments; "General - Electronically Supplied Services".
+            tax_code: "txcd_10000000",
+          },
+        },
+      },
+    ],
+    metadata: { userId, gameId },
+    payment_intent_data: { metadata: { userId, gameId } },
+    success_url: `${origin}/success`,
+    cancel_url: `${origin}/app`,
   });
-  return { checkoutUrl: result.checkoutUrl, sessionId: result.sessionId };
+  if (!session.url) throw new Error("Stripe did not return a checkout URL");
+  return { checkoutUrl: session.url };
 }
-const subscriptionStates: Record<string, string> = {
-  [WebhookEventType.SubscriptionActivated]: "active",
-  [WebhookEventType.SubscriptionRenewed]: "active",
-  [WebhookEventType.SubscriptionRecovered]: "active",
-  [WebhookEventType.SubscriptionUncanceled]: "active",
-  [WebhookEventType.SubscriptionPlanChanged]: "active",
-  [WebhookEventType.SubscriptionCanceling]: "canceling",
-  [WebhookEventType.SubscriptionCanceled]: "canceled",
-  [WebhookEventType.SubscriptionPastDue]: "past_due",
-};
-export async function processWaffoEvent(event: WebhookEvent) {
-  const data = event.data;
+
+export function verifyStripeEvent(body: string, signature: string | null) {
+  return stripe.webhooks.constructEvent(body, signature ?? "", env.STRIPE_WEBHOOK_SECRET);
+}
+
+export async function processStripeEvent(event: Stripe.Event) {
   await db.transaction(async (tx) => {
     const inserted = await tx
       .insert(webhookEvent)
-      .values({ id: event.id, eventType: event.eventType })
+      .values({ id: event.id, eventType: event.type })
       .onConflictDoNothing()
       .returning({ id: webhookEvent.id });
     if (!inserted.length) return;
-    const userId = data.merchantProvidedBuyerIdentity || data.orderMetadata?.userId;
-    if (!userId) throw new Error(`Webhook ${event.id} has no user identity`);
-    const [buyer] = await tx.select({ id: user.id }).from(user).where(eq(user.id, userId)).limit(1);
-    if (!buyer) throw new Error(`Webhook ${event.id} references unknown user`);
-    const status = subscriptionStates[event.eventType];
-    if (status) {
-      await tx
-        .insert(subscription)
-        .values({
-          orderId: data.orderId,
-          userId,
-          productId: data.orderMetadata?.productId ?? null,
-          productName: data.productName,
-          status,
-          currentPeriodEnd: data.currentPeriodEnd ? new Date(data.currentPeriodEnd) : null,
-        })
-        .onConflictDoUpdate({
-          target: subscription.orderId,
-          set: {
-            status,
-            productName: data.productName,
-            currentPeriodEnd: data.currentPeriodEnd ? new Date(data.currentPeriodEnd) : null,
-            updatedAt: new Date(),
-          },
-        });
-    }
+
     if (
-      event.eventType === WebhookEventType.OrderCompleted ||
-      event.eventType === WebhookEventType.SubscriptionActivated ||
-      event.eventType === WebhookEventType.SubscriptionRenewed ||
-      event.eventType === WebhookEventType.SubscriptionRecovered
+      event.type === "checkout.session.completed" ||
+      event.type === "checkout.session.async_payment_succeeded"
     ) {
-      const id = data.paymentId?.trim() || `${event.id}:payment`;
+      const s = event.data.object;
+      // Delayed payment methods complete with "unpaid" and follow up with async_payment_succeeded.
+      if (s.payment_status !== "paid") return;
+      const userId = s.metadata?.userId ?? s.client_reference_id;
+      if (!userId) throw new Error(`Stripe event ${event.id} has no user identity`);
+      const [buyer] = await tx.select({ id: user.id }).from(user).where(eq(user.id, userId)).limit(1);
+      if (!buyer) throw new Error(`Stripe event ${event.id} references unknown user`);
+      const paymentIntent =
+        typeof s.payment_intent === "string" ? s.payment_intent : s.payment_intent?.id;
       await tx
         .insert(payment)
         .values({
           id: crypto.randomUUID(),
           userId,
-          orderId: data.orderId,
-          paymentId: id,
-          productId: data.orderMetadata?.productId ?? null,
-          productName: data.productName,
-          amount: data.amount == null ? null : String(data.amount),
-          currency: data.currency,
+          orderId: s.id,
+          paymentId: paymentIntent ?? s.id,
+          productId: "featured-listing",
+          productName: LISTING_NAME,
+          amount: s.amount_total == null ? null : (s.amount_total / 100).toFixed(2),
+          currency: s.currency?.toUpperCase() ?? null,
           status: "completed",
-          paidAt: data.paymentDate ? new Date(data.paymentDate) : new Date(),
+          paidAt: new Date(event.created * 1000),
         })
         .onConflictDoNothing({ target: payment.paymentId });
+      const gameId = s.metadata?.gameId;
+      if (gameId)
+        await tx
+          .update(game)
+          .set({
+            status: "published",
+            plan: "paid",
+            featured: true,
+            dofollow: true,
+            orderId: s.id,
+            publishedAt: new Date(),
+          })
+          .where(
+            and(
+              eq(game.id, gameId),
+              eq(game.submitterId, userId),
+              eq(game.status, "awaiting_payment"),
+            ),
+          );
     }
-    const gameId = data.orderMetadata?.gameId;
-    if (event.eventType === WebhookEventType.OrderCompleted && gameId) {
-      await tx
-        .update(game)
-        .set({
-          status: "published",
-          plan: "paid",
-          featured: true,
-          dofollow: true,
-          orderId: data.orderId,
-          publishedAt: new Date(),
-        })
-        .where(
-          and(
-            eq(game.id, gameId),
-            eq(game.submitterId, userId),
-            eq(game.status, "awaiting_payment"),
-          ),
-        );
-    }
-    if (event.eventType === WebhookEventType.RefundSucceeded) {
-      await tx
-        .update(payment)
-        .set({ status: "refunded", updatedAt: new Date() })
-        .where(eq(payment.orderId, data.orderId));
+
+    if (event.type === "charge.refunded") {
+      const charge = event.data.object;
+      const paymentIntent =
+        typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id;
+      // ponytail: refunds only mark the payment; unlisting a refunded game stays a manual admin call.
+      if (paymentIntent)
+        await tx
+          .update(payment)
+          .set({ status: charge.refunded ? "refunded" : "partially_refunded", updatedAt: new Date() })
+          .where(eq(payment.paymentId, paymentIntent));
     }
   });
 }

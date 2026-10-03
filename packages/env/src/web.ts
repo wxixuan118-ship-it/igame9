@@ -8,6 +8,7 @@ export const env = createEnv({
     VITE_CLARITY_PROJECT_ID: z.string().min(1).optional(),
     VITE_TURNSTILE_SITE_KEY: z.string().min(1),
     VITE_SITE_NAME: z.string().min(1).optional(),
+    VITE_GOOGLE_LOGIN: z.enum(["1"]).optional(),
   },
   runtimeEnv: import.meta.env,
   emptyStringAsUndefined: true,

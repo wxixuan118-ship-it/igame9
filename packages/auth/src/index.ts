@@ -19,14 +19,17 @@ export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
   trustedOrigins: [env.BETTER_AUTH_URL],
-  socialProviders: {
-    google: { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET },
-  },
+  socialProviders:
+    env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+      ? { google: { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET } }
+      : {},
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
     revokeSessionsOnPasswordReset: true,
     sendResetPassword: async ({ user, url }) => {
+      if (!env.RESEND_API_KEY || !env.RESEND_FROM)
+        throw new Error("Password reset email is not configured (RESEND_API_KEY / RESEND_FROM)");
       const { error } = await new Resend(env.RESEND_API_KEY).emails.send({
         from: env.RESEND_FROM,
         to: user.email,

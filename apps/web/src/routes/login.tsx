@@ -127,14 +127,16 @@ function Login() {
         <button onClick={() => setMode("signup")}>{m["auth.signup"]()}</button>
         <button onClick={() => setMode("reset")}>{m["auth.reset"]()}</button>
       </div>
-      <p>
-        <button
-          className="button"
-          onClick={() => authClient.signIn.social({ provider: "google", callbackURL: "/app" })}
-        >
-          {m["auth.google"]()}
-        </button>
-      </p>
+      {env.VITE_GOOGLE_LOGIN ? (
+        <p>
+          <button
+            className="button"
+            onClick={() => authClient.signIn.social({ provider: "google", callbackURL: "/app" })}
+          >
+            {m["auth.google"]()}
+          </button>
+        </p>
+      ) : null}
     </main>
   );
 }
