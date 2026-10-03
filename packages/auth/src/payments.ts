@@ -70,7 +70,11 @@ export async function processStripeEvent(event: Stripe.Event) {
       if (s.payment_status !== "paid") return;
       const userId = s.metadata?.userId ?? s.client_reference_id;
       if (!userId) throw new Error(`Stripe event ${event.id} has no user identity`);
-      const [buyer] = await tx.select({ id: user.id }).from(user).where(eq(user.id, userId)).limit(1);
+      const [buyer] = await tx
+        .select({ id: user.id })
+        .from(user)
+        .where(eq(user.id, userId))
+        .limit(1);
       if (!buyer) throw new Error(`Stripe event ${event.id} references unknown user`);
       const paymentIntent =
         typeof s.payment_intent === "string" ? s.payment_intent : s.payment_intent?.id;
@@ -113,12 +117,17 @@ export async function processStripeEvent(event: Stripe.Event) {
     if (event.type === "charge.refunded") {
       const charge = event.data.object;
       const paymentIntent =
-        typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id;
+        typeof charge.payment_intent === "string"
+          ? charge.payment_intent
+          : charge.payment_intent?.id;
       // ponytail: refunds only mark the payment; unlisting a refunded game stays a manual admin call.
       if (paymentIntent)
         await tx
           .update(payment)
-          .set({ status: charge.refunded ? "refunded" : "partially_refunded", updatedAt: new Date() })
+          .set({
+            status: charge.refunded ? "refunded" : "partially_refunded",
+            updatedAt: new Date(),
+          })
           .where(eq(payment.paymentId, paymentIntent));
     }
   });

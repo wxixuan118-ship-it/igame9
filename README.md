@@ -74,15 +74,35 @@ pnpm dev
 
 示例文件中的空值需要替换。当前环境校验要求 Google、Turnstile、Resend、Waffo 和 R2 等服务配置，不能只填写数据库连接就启动完整应用。
 
-## igame9 静态游戏页同步
+## igame9 结构与部署
 
-自研游戏页仍在 `../igame9.ai`（静态站，每个关键词一个页面）里开发。执行：
+本仓库是 monorepo：根目录是游戏目录站（前台 `apps/web`、后台 `apps/admin`），`static/` 是原 igame9 静态游戏页（每个关键词一个页面，自带构建脚本）。
 
 ```bash
-pnpm sync:static        # 静态站目录可用 STATIC_SITE_DIR 覆盖
+pnpm sync:static           # 本地：构建 static/，把游戏页复制进 apps/web/public 并写入数据库
+pnpm sync:static --files   # 只复制文件（Docker 构建时用，不需要数据库）
+pnpm sync:static --db      # 只写数据库（容器启动时用）
 ```
 
-会用静态站自己的 `build.mjs` 构建，把 `/<slug>/` 页面、`/assets`、favicon 复制到 `apps/web/public`（并在页头注入 Submit 链接），再把每页写入 `game` 表（plan=own，url=`/<slug>/`），首页、分类页、sitemap 随之更新。静态站删除的页面会被移除并标记 `removed`。改了静态站后需要重新同步；生产库也要跑一次。静态站的首页 / sitemap / robots 不复制，由本应用动态生成。
+静态页仍在 `/<slug>/` 原样输出（页头注入 Submit 链接），在 `game` 表里记为 plan=own；描述少于 50 字的半成品页会被跳过。静态站的首页、sitemap、robots 不复制，由本应用动态生成。新增或修改游戏页：改 `static/data/pages/*.mjs`，提交后部署会自动同步。
+
+数据库结构变更：改 `packages/db/src/schema` 后运行 `pnpm db:generate` 生成迁移文件并提交；生产容器启动时 `pnpm db:migrate` 只应用新迁移。
+
+### AnySites 部署
+
+仓库自带 `Dockerfile`：构建时同步静态页并构建前台，启动时执行迁移、同步游戏表、在 3000 端口启动。推送到 `main` 即自动部署。必需环境变量：
+
+| 变量 | 说明 |
+| --- | --- |
+| `DATABASE_URL` | AnySites 分配的 PostgreSQL |
+| `BETTER_AUTH_SECRET` | 32 位以上随机字符串 |
+| `BETTER_AUTH_URL` | 站点地址，如 `https://igame9.ai` |
+| `TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET` / `TURNSTILE_HOSTNAMES` | Cloudflare Turnstile，hostnames 填站点域名 |
+| `ADMIN_EMAILS` | 管理员邮箱 |
+| `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | Stripe；Webhook 地址 `/api/webhooks/stripe`，事件 `checkout.session.completed`、`checkout.session.async_payment_succeeded`、`charge.refunded` |
+| `FEATURED_LISTING_PRICE_USD` | 付费推荐收录价格（美元，默认 29） |
+
+可选：`GOOGLE_CLIENT_ID/SECRET`（Google 登录，后台登录也需要）、`RESEND_API_KEY/RESEND_FROM`（找回密码邮件）、`R2_*`（后台博客图片上传）。
 
 ## 服务配置
 

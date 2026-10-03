@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { createAuthClient } from "better-auth/react";
-import { env } from "@starter/env/web";
+import { getAuthConfig } from "@/functions/auth-config";
 import { m } from "@/paraglide/messages";
 const authClient = createAuthClient();
 type TurnstileApi = {
@@ -16,7 +16,7 @@ declare global {
     turnstile?: TurnstileApi;
   }
 }
-function Turnstile({ onToken }: { onToken: (value: string) => void }) {
+function Turnstile({ sitekey, onToken }: { sitekey: string; onToken: (value: string) => void }) {
   useEffect(() => {
     let id: string | undefined;
     let cancelled = false;
@@ -24,7 +24,7 @@ function Turnstile({ onToken }: { onToken: (value: string) => void }) {
     const render = () => {
       if (cancelled || !element || !window.turnstile || id) return;
       id = window.turnstile.render(element, {
-        sitekey: env.VITE_TURNSTILE_SITE_KEY,
+        sitekey,
         action: "auth",
         callback: onToken,
       });
@@ -40,10 +40,11 @@ function Turnstile({ onToken }: { onToken: (value: string) => void }) {
     return () => {
       cancelled = true;
     };
-  }, [onToken]);
+  }, [sitekey, onToken]);
   return <div id="auth-turnstile" />;
 }
 function Login() {
+  const config = Route.useLoaderData();
   const [mode, setMode] = useState<"signin" | "signup" | "reset">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -111,7 +112,7 @@ function Login() {
             />
           </label>
         ) : null}
-        <Turnstile onToken={setToken} />
+        <Turnstile sitekey={config.turnstileSiteKey} onToken={setToken} />
         <button className="button" type="submit">
           {mode === "signup"
             ? m["auth.signup"]()
@@ -127,7 +128,7 @@ function Login() {
         <button onClick={() => setMode("signup")}>{m["auth.signup"]()}</button>
         <button onClick={() => setMode("reset")}>{m["auth.reset"]()}</button>
       </div>
-      {env.VITE_GOOGLE_LOGIN ? (
+      {config.google ? (
         <p>
           <button
             className="button"
@@ -141,6 +142,7 @@ function Login() {
   );
 }
 export const Route = createFileRoute("/login")({
+  loader: () => getAuthConfig(),
   head: () => ({ meta: [{ title: "Sign in | igame9" }, { name: "robots", content: "noindex" }] }),
   component: Login,
 });

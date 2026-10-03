@@ -12,6 +12,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string().min(1).optional(),
     GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
     TURNSTILE_SECRET: z.string().min(1),
+    TURNSTILE_SITE_KEY: z.string().min(1),
     TURNSTILE_HOSTNAMES: z.string().min(1),
     // Optional: password-reset emails fail with a clear error until set.
     RESEND_API_KEY: z.string().min(1).optional(),

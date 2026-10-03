@@ -15,7 +15,11 @@
     "db:start": "pnpm --dir packages/db db:start",
     "db:stop": "pnpm --dir packages/db db:stop",
     "check": "oxlint && oxfmt --check",
-    "sync:static": "pnpm --dir packages/db exec tsx scripts/sync-static-games.ts"
+    "sync:static": "pnpm --dir packages/db exec tsx scripts/sync-static-games.ts",
+    "db:generate": "pnpm --dir packages/db db:generate",
+    "db:migrate": "pnpm --dir packages/db db:migrate",
+    "build:prod": "pnpm sync:static --files && pnpm --filter web build",
+    "start": "pnpm db:migrate && pnpm sync:static --db && node apps/web/.output/server/index.mjs"
   },
   "devDependencies": {
     "@starter/config": "workspace:*",

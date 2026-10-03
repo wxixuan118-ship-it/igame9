@@ -1,0 +1,13 @@
+**/node_modules
+**/.output
+**/.turbo
+**/dist
+.git
+**/env.local
+**/env.prod
+**/.env*
+apps/web/public/*
+!apps/web/public/badge.svg
+!apps/web/public/thumb-fallback.svg
+apps/web/src/static-assets.gen.json
+apps/web/src/paraglide
