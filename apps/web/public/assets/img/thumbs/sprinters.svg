@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d1030"/>
+      <stop offset="1" stop-color="#2f3577"/>
+    </linearGradient>
+    <pattern id="crowd" width="24" height="18" patternUnits="userSpaceOnUse">
+      <rect width="24" height="18" fill="#2c3150"/>
+      <rect y="16" width="24" height="2" fill="#20243b"/>
+      <rect x="2" y="9" width="7" height="8" fill="#ef4444"/><circle cx="5.5" cy="7" r="3" fill="#e0ac69"/>
+      <rect x="14" y="9" width="7" height="8" fill="#3b82f6"/><circle cx="17.5" cy="7" r="3" fill="#8d5524"/>
+    </pattern>
+    <pattern id="crowd2" width="30" height="18" patternUnits="userSpaceOnUse" x="9" y="9">
+      <rect x="4" y="9" width="7" height="8" fill="#fbbf24"/><circle cx="7.5" cy="7" r="3" fill="#f1c27d"/>
+      <rect x="19" y="8" width="7" height="9" fill="#f8fafc"/><circle cx="22.5" cy="6" r="3" fill="#c68642"/>
+      <rect x="18" y="1" width="2" height="6" fill="#c68642"/><rect x="25" y="1" width="2" height="6" fill="#c68642"/>
+    </pattern>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffbe6" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#fffbe6" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="70" fill="url(#sky)"/>
+  <polygon points="130,26 170,26 260,130 40,130" fill="url(#beam)"/>
+  <polygon points="470,26 510,26 600,130 380,130" fill="url(#beam)"/>
+  <rect x="128" y="14" width="44" height="14" rx="2" fill="#3a3f66"/>
+  <g fill="#fffbe6"><rect x="132" y="17" width="8" height="8"/><rect x="142" y="17" width="8" height="8"/><rect x="152" y="17" width="8" height="8"/><rect x="162" y="17" width="7" height="8"/></g>
+  <rect x="468" y="14" width="44" height="14" rx="2" fill="#3a3f66"/>
+  <g fill="#fffbe6"><rect x="472" y="17" width="8" height="8"/><rect x="482" y="17" width="8" height="8"/><rect x="492" y="17" width="8" height="8"/><rect x="502" y="17" width="7" height="8"/></g>
+  <rect y="62" width="640" height="8" fill="#1a1d38"/>
+  <rect y="70" width="640" height="104" fill="url(#crowd)"/>
+  <rect y="70" width="640" height="104" fill="url(#crowd2)"/>
+  <g fill="#fff"><circle cx="88" cy="96" r="3"/><circle cx="262" cy="130" r="2.5"/><circle cx="410" cy="88" r="3"/><circle cx="560" cy="140" r="2.5"/><circle cx="330" cy="104" r="2"/></g>
+  <!-- boards -->
+  <rect y="174" width="640" height="18" fill="#0b0d1a"/>
+  <rect x="0" y="175" width="150" height="16" fill="#1d4ed8"/>
+  <rect x="152" y="175" width="160" height="16" fill="#be123c"/>
+  <rect x="314" y="175" width="160" height="16" fill="#047857"/>
+  <rect x="476" y="175" width="164" height="16" fill="#7c3aed"/>
+  <g font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" font-size="12" font-weight="900" fill="#fff" text-anchor="middle">
+    <text x="75" y="187">IGAME9</text><text x="232" y="187">100 M</text><text x="394" y="187">SPRINT</text><text x="558" y="187">PHOTO FINISH</text>
+  </g>
+  <!-- track -->
+  <rect y="192" width="640" height="138" fill="#b9472f"/>
+  <g fill="#fff" opacity=".85">
+    <rect y="191" width="640" height="2"/><rect y="213" width="640" height="2"/><rect y="236" width="640" height="2"/><rect y="260" width="640" height="2.5"/><rect y="285" width="640" height="2.5"/><rect y="311" width="640" height="3"/>
+  </g>
+  <line x1="180" y1="192" x2="150" y2="330" stroke="#fff" stroke-opacity=".35" stroke-width="2"/>
+  <!-- finish line -->
+  <line x1="508" y1="192" x2="540" y2="330" stroke="#fff" stroke-width="6"/>
+  <g><rect x="532" y="332" width="7" height="7" fill="#111"/><rect x="539" y="332" width="7" height="7" fill="#fff"/><rect x="532" y="339" width="7" height="7" fill="#fff"/><rect x="539" y="339" width="7" height="7" fill="#111"/><rect x="532" y="346" width="7" height="7" fill="#111"/><rect x="539" y="346" width="7" height="7" fill="#fff"/></g>
+  <rect y="330" width="640" height="30" fill="#2f7d32"/>
+  <rect y="330" width="640" height="3" fill="#e5e7eb"/>
+  <!-- photo-finish clock -->
+  <rect x="512" y="122" width="4" height="52" fill="#111827"/>
+  <rect x="474" y="98" width="80" height="30" rx="3" fill="#0b0b0f" stroke="#fbbf24" stroke-width="2"/>
+  <text x="514" y="120" text-anchor="middle" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="20" font-weight="900" fill="#fbbf24">9.87</text>
+  <!-- runners (far to near) -->
+  <g stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- lane 2: orange, behind -->
+    <g transform="translate(330 222) scale(.78)">
+      <ellipse cx="0" cy="2" rx="22" ry="4" fill="#000" stroke="none" opacity=".25"/>
+      <path d="M2 -52 L-10 -30 L-28 -22" stroke="#7a4a24" stroke-width="7"/><path d="M-28 -22 l7 -5" stroke="#111827" stroke-width="5"/>
+      <path d="M2 -52 L-2 -86" stroke="#f97316" stroke-width="13"/>
+      <path d="M-1 -80 L-16 -66 L-6 -56" stroke="#7a4a24" stroke-width="5"/>
+      <circle cx="2" cy="-96" r="7" fill="#a0673a" stroke="none"/>
+      <path d="M2 -52 L18 -38 L10 -14" stroke="#a0673a" stroke-width="7"/><path d="M10 -14 l9 3" stroke="#f8fafc" stroke-width="5"/>
+      <path d="M-1 -80 L14 -72 L24 -84" stroke="#a0673a" stroke-width="5"/>
+      <path d="M2 -52 L4 -60" stroke="#1f2937" stroke-width="12"/>
+    </g>
+    <!-- lane 3: green -->
+    <g transform="translate(412 246) scale(.86)">
+      <ellipse cx="0" cy="2" rx="22" ry="4" fill="#000" stroke="none" opacity=".25"/>
+      <path d="M0 -52 L-14 -32 L-30 -30" stroke="#c68642" stroke-width="7" opacity=".85"/><path d="M-30 -30 l6 -6" stroke="#111827" stroke-width="5"/>
+      <path d="M0 -52 L8 -86" stroke="#22c55e" stroke-width="13"/>
+      <path d="M6 -80 L-8 -66 L2 -56" stroke="#a86d33" stroke-width="5"/>
+      <circle cx="12" cy="-95" r="7" fill="#c68642" stroke="none"/>
+      <path d="M0 -52 L20 -42 L14 -16" stroke="#c68642" stroke-width="7"/><path d="M14 -16 l9 3" stroke="#f8fafc" stroke-width="5"/>
+      <path d="M6 -80 L22 -70 L32 -82" stroke="#c68642" stroke-width="5"/>
+      <path d="M0 -52 L2 -60" stroke="#1f2937" stroke-width="12"/>
+    </g>
+    <!-- lane 4: player (cyan) leading -->
+    <g transform="translate(470 272) scale(.95)">
+      <ellipse cx="0" cy="2" rx="22" ry="4" fill="#000" stroke="none" opacity=".25"/>
+      <path d="M2 -52 L-12 -30 L-30 -26" stroke="#d29a5e" stroke-width="7"/><path d="M-30 -26 l6 -6" stroke="#111827" stroke-width="5"/>
+      <path d="M2 -52 L12 -86" stroke="#2dd4f0" stroke-width="13"/>
+      <path d="M10 -80 L-4 -66 L6 -56" stroke="#d29a5e" stroke-width="5"/>
+      <circle cx="16" cy="-95" r="7" fill="#f1c27d" stroke="none"/>
+      <path d="M9 -98 a7 7 0 0 1 12 -4" stroke="#3b2416" stroke-width="5"/>
+      <path d="M2 -52 L22 -40 L16 -14" stroke="#f1c27d" stroke-width="7"/><path d="M16 -14 l9 3" stroke="#f8fafc" stroke-width="5"/>
+      <path d="M10 -80 L26 -70 L36 -82" stroke="#f1c27d" stroke-width="5"/>
+      <path d="M2 -52 L4 -60" stroke="#1f2937" stroke-width="12"/>
+    </g>
+    <!-- lane 5: red, near -->
+    <g transform="translate(380 298)">
+      <ellipse cx="0" cy="2" rx="24" ry="4" fill="#000" stroke="none" opacity=".25"/>
+      <path d="M0 -52 L16 -36 L10 -14" stroke="#4a2c17" stroke-width="7"/><path d="M10 -14 l9 3" stroke="#111827" stroke-width="5"/>
+      <path d="M0 -52 L8 -86" stroke="#ef4444" stroke-width="13"/>
+      <path d="M6 -80 L20 -70 L30 -82" stroke="#4a2c17" stroke-width="5"/>
+      <circle cx="12" cy="-95" r="7" fill="#5c3a1e" stroke="none"/>
+      <path d="M0 -52 L-12 -32 L-30 -28" stroke="#5c3a1e" stroke-width="7"/><path d="M-30 -28 l6 -6" stroke="#f8fafc" stroke-width="5"/>
+      <path d="M6 -80 L-8 -68 L0 -58" stroke="#5c3a1e" stroke-width="5"/>
+      <path d="M0 -52 L2 -60" stroke="#1f2937" stroke-width="12"/>
+    </g>
+  </g>
+  <!-- YOU marker -->
+  <rect x="464" y="152" width="34" height="15" rx="4" fill="#2dd4f0"/>
+  <polygon points="476,167 486,167 481,172" fill="#2dd4f0"/>
+  <text x="481" y="163.5" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" font-size="10.5" font-weight="900" fill="#05060e">YOU</text>
+  <!-- speed lines -->
+  <g stroke="#fff" stroke-opacity=".35" stroke-width="2" stroke-linecap="round">
+    <path d="M410 222h-34M408 240h-24M426 262h-40M330 280h-36"/>
+  </g>
+  <!-- HUD: L/R buttons -->
+  <rect x="16" y="300" width="56" height="44" rx="10" fill="#05060e" opacity=".55" stroke="#2dd4f0" stroke-width="2"/>
+  <rect x="568" y="300" width="56" height="44" rx="10" fill="#2dd4f0" opacity=".45"/>
+  <g font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" font-size="26" font-weight="900" fill="#fff" text-anchor="middle">
+    <text x="44" y="331">←</text><text x="596" y="331">→</text>
+  </g>
+</svg>
