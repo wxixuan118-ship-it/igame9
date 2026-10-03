@@ -3,8 +3,11 @@ export const Route = createFileRoute("/success")({
   component: () => (
     <main className="panel">
       <h1>Thank you</h1>
-      <p>Your order will appear after the payment provider confirms it.</p>
-      <Link to="/app">Return to app</Link>
+      <p>
+        Your game goes live as soon as the payment provider confirms the order, usually within a
+        minute.
+      </p>
+      <Link to="/app">Go to My games</Link>
     </main>
   ),
 });

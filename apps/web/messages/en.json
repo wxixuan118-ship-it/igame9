@@ -1,13 +1,13 @@
 {
-  "site.name": "Starter",
-  "site.description": "A starting point for your next project.",
+  "site.name": "igame9",
+  "site.description": "Free online browser games from indie developers and the igame9 studio.",
   "nav.home": "Home",
-  "nav.app": "App",
+  "nav.app": "My games",
   "nav.blog": "Blog",
   "nav.login": "Sign in",
   "nav.logout": "Sign out",
-  "home.title": "Your next project starts here",
-  "home.body": "Replace this page with your product. Authentication, payments, publishing, and operations are ready.",
+  "home.title": "Play free browser games",
+  "home.body": "Discover new web games from indie developers and our own studio. Made a game? Submit it and reach new players.",
   "app.title": "Your app",
   "app.body": "Add your product here.",
   "app.products": "Products",
@@ -23,5 +23,7 @@
   "blog.empty": "No posts yet.",
   "app.checkout": "Checkout",
   "app.subscriptions": "Subscriptions",
-  "app.manageSubscription": "Manage subscription"
+  "app.manageSubscription": "Manage subscription",
+  "nav.games": "Games",
+  "nav.submit": "Submit a game"
 }

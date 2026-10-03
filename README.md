@@ -74,6 +74,16 @@ pnpm dev
 
 示例文件中的空值需要替换。当前环境校验要求 Google、Turnstile、Resend、Waffo 和 R2 等服务配置，不能只填写数据库连接就启动完整应用。
 
+## igame9 静态游戏页同步
+
+自研游戏页仍在 `../igame9.ai`（静态站，每个关键词一个页面）里开发。执行：
+
+```bash
+pnpm sync:static        # 静态站目录可用 STATIC_SITE_DIR 覆盖
+```
+
+会用静态站自己的 `build.mjs` 构建，把 `/<slug>/` 页面、`/assets`、favicon 复制到 `apps/web/public`（并在页头注入 Submit 链接），再把每页写入 `game` 表（plan=own，url=`/<slug>/`），首页、分类页、sitemap 随之更新。静态站删除的页面会被移除并标记 `removed`。改了静态站后需要重新同步；生产库也要跑一次。静态站的首页 / sitemap / robots 不复制，由本应用动态生成。
+
 ## 服务配置
 
 所有变量以 [`apps/web/env.local.example`](./apps/web/env.local.example) 为准。

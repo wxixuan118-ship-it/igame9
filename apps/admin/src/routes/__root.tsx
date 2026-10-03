@@ -21,6 +21,7 @@ export const Route = createRootRoute({
             <Link to="/users">Users</Link>
             <Link to="/payments">Payments</Link>
             <Link to="/audit">Audit</Link>
+            <Link to="/games">Games</Link>
             <Link to="/blog">Blog</Link>
           </nav>
           <Outlet />

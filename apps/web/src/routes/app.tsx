@@ -1,14 +1,21 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { orpc } from "@/utils/orpc";
-import { m } from "@/paraglide/messages";
-export const Route = createFileRoute("/app")({ component: App });
+export const Route = createFileRoute("/app")({
+  head: () => ({ meta: [{ title: "My games | igame9" }, { name: "robots", content: "noindex" }] }),
+  component: App,
+});
+const statusLabel: Record<string, string> = {
+  awaiting_payment: "Awaiting payment",
+  pending: "In review",
+  published: "Live",
+  rejected: "Needs changes",
+};
 function App() {
   const me = useQuery(orpc.me.queryOptions());
-  const products = useQuery(orpc.products.queryOptions());
+  const games = useQuery(orpc.games.mine.queryOptions());
   const payments = useQuery(orpc.payments.queryOptions());
-  const subscriptions = useQuery(orpc.subscriptions.queryOptions());
-  const checkout = useMutation(orpc.checkout.mutationOptions());
+  const pay = useMutation(orpc.games.pay.mutationOptions());
   if (me.isError)
     return (
       <main className="panel">
@@ -18,52 +25,57 @@ function App() {
   return (
     <main>
       <section className="panel">
-        <h1>{m["app.title"]()}</h1>
-        <p>{m["app.body"]()}</p>
-        <p>{me.data?.email}</p>
-      </section>
-      <section className="panel">
-        <h2>{m["app.products"]()}</h2>
-        <div className="grid">
-          {products.data?.map((product) => (
-            <div className="panel" key={product.id}>
-              <h3>{product.name}</h3>
-              <button
-                className="button"
-                disabled={checkout.isPending}
-                onClick={async () => {
-                  const result = await checkout.mutateAsync({ productId: product.id });
-                  location.href = result.checkoutUrl;
-                }}
-              >
-                {m["app.checkout"]()}
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
-      <section className="panel">
-        <h2>{m["app.subscriptions"]()}</h2>
+        <h1>My games</h1>
+        <p className="muted">{me.data?.email}</p>
+        <p>
+          <Link to="/submit" className="button">
+            Submit a game
+          </Link>
+        </p>
         <div className="table-wrap">
           <table>
             <tbody>
-              {subscriptions.data?.map((item) => (
-                <tr key={item.orderId}>
-                  <td>{item.productName}</td>
-                  <td>{item.status}</td>
+              {games.data?.map((g) => (
+                <tr key={g.id}>
+                  <td>
+                    {g.status === "published" ? (
+                      <Link to="/games/$slug" params={{ slug: g.slug }}>
+                        {g.title}
+                      </Link>
+                    ) : (
+                      g.title
+                    )}
+                  </td>
+                  <td>{g.plan === "paid" ? "Featured" : g.plan === "free" ? "Free" : g.plan}</td>
+                  <td>
+                    {statusLabel[g.status] ?? g.status}
+                    {g.rejectReason ? <div className="error">{g.rejectReason}</div> : null}
+                  </td>
+                  <td className="row">
+                    <Link to="/submit" search={{ id: g.id }}>
+                      Edit
+                    </Link>
+                    {g.status === "awaiting_payment" ? (
+                      <button
+                        className="button"
+                        disabled={pay.isPending}
+                        onClick={async () => {
+                          location.href = (await pay.mutateAsync({ id: g.id })).checkoutUrl;
+                        }}
+                      >
+                        Pay now
+                      </button>
+                    ) : null}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p>
-          <a href="https://pancake.waffo.ai/consumer/portal/login">
-            {m["app.manageSubscription"]()}
-          </a>
-        </p>
+        {pay.error ? <p className="error">{pay.error.message}</p> : null}
       </section>
       <section className="panel">
-        <h2>{m["app.payments"]()}</h2>
+        <h2>Payments</h2>
         <div className="table-wrap">
           <table>
             <tbody>

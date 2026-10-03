@@ -1,13 +1,13 @@
 {
-  "site.name": "项目模板",
-  "site.description": "新项目的起点。",
+  "site.name": "igame9",
+  "site.description": "来自独立开发者和 igame9 工作室的免费网页游戏。",
   "nav.home": "首页",
-  "nav.app": "应用",
+  "nav.app": "我的游戏",
   "nav.blog": "博客",
   "nav.login": "登录",
   "nav.logout": "退出登录",
-  "home.title": "从这里开启新项目",
-  "home.body": "将这里替换为你的产品。登录、支付、内容发布与后台已接好。",
+  "home.title": "免费网页游戏",
+  "home.body": "发现独立开发者和我们工作室的新网页游戏。做了游戏？提交上来，让更多玩家看到。",
   "app.title": "应用首页",
   "app.body": "在这里添加你的产品功能。",
   "app.products": "商品",
@@ -23,5 +23,7 @@
   "blog.empty": "暂无文章。",
   "app.checkout": "结账",
   "app.subscriptions": "订阅",
-  "app.manageSubscription": "管理订阅"
+  "app.manageSubscription": "管理订阅",
+  "nav.games": "游戏",
+  "nav.submit": "提交游戏"
 }

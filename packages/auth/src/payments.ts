@@ -1,9 +1,10 @@
 import { db } from "@starter/db";
 import { payment, subscription, webhookEvent } from "@starter/db/schema/payment";
 import { user } from "@starter/db/schema/auth";
+import { game } from "@starter/db/schema/game";
 import { env } from "@starter/env/server";
 import { WaffoPancake, WebhookEventType, type WebhookEvent } from "@waffo/pancake-ts";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
 const productSchema = z.object({
@@ -17,7 +18,14 @@ export const waffoClient = new WaffoPancake({
   privateKey: env.WAFFO_PRIVATE_KEY,
   environment: env.WAFFO_ENVIRONMENT,
 });
-export async function createCheckout(userId: string, email: string, productId: string) {
+/** One-time product sold as a featured listing. */
+export const listingProduct = products.find((x) => x.type === "onetime");
+export async function createCheckout(
+  userId: string,
+  email: string,
+  productId: string,
+  extra: Record<string, string> = {},
+) {
   const product = products.find((x) => x.id === productId);
   if (!product) throw new Error("Unknown product");
   const result = await waffoClient.checkout.authenticated.create({
@@ -26,7 +34,7 @@ export async function createCheckout(userId: string, email: string, productId: s
     buyerIdentity: userId,
     buyerEmail: email,
     successUrl: env.WAFFO_SUCCESS_URL,
-    metadata: { userId, productId: product.id },
+    metadata: { ...extra, userId, productId: product.id },
     orderMerchantExternalId: `${userId}:${crypto.randomUUID()}`,
   });
   return { checkoutUrl: result.checkoutUrl, sessionId: result.sessionId };
@@ -98,6 +106,26 @@ export async function processWaffoEvent(event: WebhookEvent) {
           paidAt: data.paymentDate ? new Date(data.paymentDate) : new Date(),
         })
         .onConflictDoNothing({ target: payment.paymentId });
+    }
+    const gameId = data.orderMetadata?.gameId;
+    if (event.eventType === WebhookEventType.OrderCompleted && gameId) {
+      await tx
+        .update(game)
+        .set({
+          status: "published",
+          plan: "paid",
+          featured: true,
+          dofollow: true,
+          orderId: data.orderId,
+          publishedAt: new Date(),
+        })
+        .where(
+          and(
+            eq(game.id, gameId),
+            eq(game.submitterId, userId),
+            eq(game.status, "awaiting_payment"),
+          ),
+        );
     }
     if (event.eventType === WebhookEventType.RefundSucceeded) {
       await tx

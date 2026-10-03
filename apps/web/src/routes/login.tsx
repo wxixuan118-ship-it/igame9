@@ -122,7 +122,7 @@ function Login() {
       </form>
       <p className="error">{error}</p>
       <p>{message}</p>
-      <div className="nav">
+      <div className="row">
         <button onClick={() => setMode("signin")}>{m["auth.signin"]()}</button>
         <button onClick={() => setMode("signup")}>{m["auth.signup"]()}</button>
         <button onClick={() => setMode("reset")}>{m["auth.reset"]()}</button>
@@ -138,4 +138,7 @@ function Login() {
     </main>
   );
 }
-export const Route = createFileRoute("/login")({ component: Login });
+export const Route = createFileRoute("/login")({
+  head: () => ({ meta: [{ title: "Sign in | igame9" }, { name: "robots", content: "noindex" }] }),
+  component: Login,
+});

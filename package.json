@@ -1,11 +1,11 @@
 {
   "name": "saas-starter",
   "private": true,
-  "type": "module",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
+  "type": "module",
   "scripts": {
     "dev": "pnpm --parallel --filter web --filter admin dev",
     "build": "turbo run build",
@@ -14,7 +14,8 @@
     "db:studio": "pnpm --dir packages/db db:studio",
     "db:start": "pnpm --dir packages/db db:start",
     "db:stop": "pnpm --dir packages/db db:stop",
-    "check": "oxlint && oxfmt --check"
+    "check": "oxlint && oxfmt --check",
+    "sync:static": "pnpm --dir packages/db exec tsx scripts/sync-static-games.ts"
   },
   "devDependencies": {
     "@starter/config": "workspace:*",

@@ -1,121 +1,140 @@
-@import "tailwindcss";
-:root {
-  font-family: system-ui, sans-serif;
-  color: #1d2632;
-  background: #f8fafc;
-}
-* {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-}
-a {
-  color: inherit;
-}
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-button {
-  cursor: pointer;
-  min-height: 44px;
-}
-.shell {
-  max-width: 960px;
-  margin: auto;
-  padding: 24px;
-}
-.nav {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.nav a {
-  text-decoration: none;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-}
-.nav a:hover {
-  text-decoration: underline;
+/* App pages (submit, account, auth, directory listings). Base theme comes from the static
+   site's /assets/css/site.css, loaded before this file. */
+.page {
+  padding-top: 32px;
+  padding-bottom: 48px;
 }
 .panel {
-  background: white;
-  border: 1px solid #d6dce4;
-  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   padding: 24px;
   margin-top: 24px;
 }
+.panel h1 {
+  margin-top: 0;
+}
 .stack {
   display: grid;
+  gap: 14px;
+}
+.row {
+  display: flex;
   gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 .field {
   display: grid;
   gap: 6px;
+  color: var(--text-2);
+  font-weight: 600;
+  font-size: 14px;
 }
 .field input,
 .field textarea,
-.field select {
+.field select,
+.code {
   width: 100%;
-  border: 1px solid #9ca8b8;
-  border-radius: 8px;
-  padding: 10px;
+  font: inherit;
+  font-weight: 400;
+  color: var(--text);
+  background: var(--bg-2);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
   min-height: 44px;
 }
 .field textarea {
   min-height: 180px;
 }
-.button {
-  border: 1px solid #293647;
-  border-radius: 8px;
-  padding: 10px 16px;
-  min-height: 44px;
-  background: #293647;
-  color: white;
+.code {
+  font-family: var(--mono);
+  font-size: 13px;
 }
+button,
+.button {
+  font: inherit;
+  cursor: pointer;
+  min-height: 44px;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 700;
+  border: 1px solid var(--line-2);
+  background: var(--surface-2);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.button {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--accent-ink);
+  text-decoration: none;
+}
+.button:hover {
+  text-decoration: none;
+  filter: brightness(1.08);
+}
+button:disabled,
 .button:disabled {
   opacity: 0.55;
+  cursor: default;
 }
 .muted {
-  color: #657080;
-}
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+  color: var(--muted);
 }
 .error {
-  color: #a92323;
+  color: var(--bad);
 }
-img {
-  max-width: 100%;
+.plan {
+  display: grid;
+  gap: 4px;
+  border: 2px solid var(--line-2);
+  border-radius: var(--radius);
+  padding: 16px;
+  cursor: pointer;
+  color: var(--text-2);
 }
-article {
-  line-height: 1.7;
+.plan strong {
+  color: var(--text);
 }
-table {
+.plan-active {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+.embed {
+  aspect-ratio: 16 / 9;
+  margin: 16px 0;
+}
+.embed iframe {
   width: 100%;
-  border-collapse: collapse;
+  height: 100%;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: #000;
 }
-td,
-th {
-  padding: 10px;
-  border-bottom: 1px solid #d6dce4;
-  text-align: left;
+.hub-cta {
+  text-align: center;
 }
-@media (max-width: 768px) {
-  .shell {
-    padding: 16px;
-  }
-  .panel {
-    padding: 16px;
-  }
-  .table-wrap {
-    overflow-x: auto;
-  }
+.filters a {
+  font: 600 14px var(--font);
+  color: var(--text-2);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 8px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+.filters a[aria-current="page"] {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: transparent;
+}
+/* Pages that render a bare <main> (auth, account, submit, blog) get the site width. */
+body > main:not(.wrap) {
+  width: calc(100% - 40px);
+  max-width: 860px;
+  margin: 32px auto 48px;
 }
