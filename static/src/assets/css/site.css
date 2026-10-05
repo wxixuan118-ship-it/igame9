@@ -918,24 +918,51 @@ kbd {
   font-size: 14px;
   color: var(--muted);
 }
-.foot-grid {
+.foot-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.foot-brand p {
+  margin: 0;
+  flex: 1 1 320px;
+}
+/* One horizontal row per category: label on the left, game links flowing to the right. */
+.foot-rows {
   display: grid;
-  grid-template-columns: 1.3fr repeat(auto-fit, minmax(150px, 1fr));
-  gap: 26px;
+  gap: 12px;
+  padding-top: 18px;
+}
+.foot-row {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 16px;
+  align-items: baseline;
 }
 .site-footer h2 {
-  font-size: 13px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-2);
-  margin: 0 0 10px;
+  margin: 0;
+  white-space: nowrap;
 }
 .site-footer ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+}
+@media (max-width: 720px) {
+  .foot-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
 }
 .site-footer a {
   color: var(--muted);
