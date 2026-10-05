@@ -100,8 +100,10 @@ function proxyDirectory(req, res) {
 http
   .createServer((req, res) => {
     const pathOnly = (req.url || '/').split('?')[0];
-    if (DIRECTORY_ORIGIN && (pathOnly === DIRECTORY || pathOnly.startsWith(DIRECTORY + '/'))) {
-      proxyDirectory(req, res);
+    if (pathOnly === DIRECTORY || pathOnly.startsWith(DIRECTORY + '/')) {
+      // Until the directory deployment is configured, send visitors to the games hub instead of a 404.
+      if (DIRECTORY_ORIGIN) proxyDirectory(req, res);
+      else res.writeHead(302, { Location: '/', 'Cache-Control': 'no-store' }).end();
       return;
     }
     if (req.method !== 'GET' && req.method !== 'HEAD') {
