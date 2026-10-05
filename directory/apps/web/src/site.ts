@@ -1,5 +1,5 @@
 import { DIRECTORY_BASE } from "@starter/env/base";
-// Mirrors static/data/site.mjs.
+// Mirrors data/site.mjs of the games site (repo root).
 export const site = {
   name: "igame9",
   url: (import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://igame9.ai",

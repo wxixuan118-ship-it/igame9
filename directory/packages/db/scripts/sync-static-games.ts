@@ -1,14 +1,14 @@
 /**
- * Pulls the games site (static/) into the directory app, which runs as a separate deployment at /directory.
+ * Pulls the games site (repo root) into the directory app, which runs as a separate deployment at /directory.
  *   pnpm sync:static              files + database (local dev)
  *   pnpm sync:static --files      files only (Docker build: no env/database needed)
  *   pnpm sync:static --db         database only (container start)
- * STATIC_SITE_DIR defaults to static/ in this repo.
- * 1. Builds static/ with its own build.mjs into a temp dir.
+ * STATIC_SITE_DIR defaults to the repo root (the games site).
+ * 1. Builds the games site with its own build.mjs into a temp dir.
  * 2. Copies its /assets (CSS, thumbnails) and favicon into apps/web/public so directory pages share the look.
  *    The game pages themselves stay on the games site.
  * 3. Upserts each page as an `own` game whose url is "/<slug>/" (games site, same domain).
- * Safe to re-run; pages deleted from static/ are marked `removed`.
+ * Safe to re-run; pages deleted from the games site are marked `removed`.
  */
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
@@ -19,7 +19,8 @@ import { and, eq, notInArray, sql } from "drizzle-orm";
 import { categoryInfo, game } from "../src/schema/game";
 
 const repoRoot = path.resolve(import.meta.dirname, "../../..");
-const staticDir = path.resolve(process.env.STATIC_SITE_DIR ?? path.join(repoRoot, "static"));
+// The games site is the repo root; this app lives in directory/.
+const staticDir = path.resolve(process.env.STATIC_SITE_DIR ?? path.join(repoRoot, ".."));
 const onlyFiles = process.argv.includes("--files");
 const onlyDb = process.argv.includes("--db");
 const publicDir = path.join(repoRoot, "apps/web/public");

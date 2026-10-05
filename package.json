@@ -1,40 +1,18 @@
 {
-  "name": "saas-starter",
+  "name": "igame9-site",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "version": "1.0.0",
   "type": "module",
+  "description": "igame9.ai — static browser-game site: one page per keyword plus a hub page.",
   "scripts": {
-    "dev": "pnpm --parallel --filter web --filter admin dev",
-    "build": "turbo run build",
-    "check-types": "turbo run check-types",
-    "db:push": "pnpm --dir packages/db db:push",
-    "db:studio": "pnpm --dir packages/db db:studio",
-    "db:start": "pnpm --dir packages/db db:start",
-    "db:stop": "pnpm --dir packages/db db:stop",
-    "check": "oxlint && oxfmt --check",
-    "sync:static": "pnpm --dir packages/db exec tsx scripts/sync-static-games.ts",
-    "db:generate": "pnpm --dir packages/db db:generate",
-    "db:migrate": "pnpm --dir packages/db db:migrate",
-    "build:prod": "pnpm sync:static --files && pnpm --filter web build && node static/build.mjs",
-    "start:games": "node static/serve.mjs",
-    "start:directory": "pnpm db:migrate && pnpm sync:static --db && node apps/web/.output/server/index.mjs",
-    "start": "if [ \"$SERVICE\" = directory ]; then pnpm start:directory; else pnpm start:games; fi"
-  },
-  "devDependencies": {
-    "@starter/config": "workspace:*",
-    "@types/node": "catalog:",
-    "oxfmt": "^0.67.0",
-    "oxlint": "^1.82.0",
-    "tsx": "^4.23.1",
-    "turbo": "^2.10.12",
-    "typescript": "catalog:",
-    "vercel": "^59.11.7"
+    "build": "node build.mjs",
+    "start": "node build.mjs && node serve.mjs",
+    "serve": "node serve.mjs 4173 --dev",
+    "dev": "node build.mjs && node serve.mjs 4173 --dev",
+    "og": "node scripts/og-images.mjs",
+    "check": "node scripts/check.mjs"
   },
   "engines": {
-    "node": "24.x"
-  },
-  "packageManager": "pnpm@11.26.0"
+    "node": ">=18"
+  }
 }

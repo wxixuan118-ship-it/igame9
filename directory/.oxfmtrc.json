@@ -1,0 +1,6 @@
+{
+  "ignorePatterns": [
+    "apps/web/public/**",
+    "apps/web/src/static-assets.gen.json"
+  ]
+}

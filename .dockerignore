@@ -6,9 +6,8 @@
 **/env.local
 **/env.prod
 **/.env*
-apps/web/public/*
-!apps/web/public/badge.svg
-!apps/web/public/thumb-fallback.svg
-apps/web/src/static-assets.gen.json
-apps/web/src/paraglide
-static/dist
+directory/apps/web/public/*
+!directory/apps/web/public/badge.svg
+!directory/apps/web/public/thumb-fallback.svg
+directory/apps/web/src/static-assets.gen.json
+directory/apps/web/src/paraglide
