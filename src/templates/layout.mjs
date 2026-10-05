@@ -81,19 +81,17 @@ export function footer(pages) {
         .filter((p) => p.category === key)
         .map((p) => `<li><a href="${pagePath(p.slug)}">${esc(p.seo.h1)}</a></li>`)
         .join('');
-      return items ? `<div><h2>${esc(c.name)}</h2><ul>${items}</ul></div>` : '';
+      return items ? `<div class="foot-row"><h2>${esc(c.name)}</h2><ul>${items}</ul></div>` : '';
     })
     .join('');
   const year = new Date().getFullYear();
   return `<footer class="site-footer">
   <div class="wrap">
-    <div class="foot-grid">
-      <div>
-        <a class="logo" href="/">${icons.logo}<span>i<b>game9</b></span></a>
-        <p>${esc(site.description)}</p>
-      </div>
-      ${cols}
+    <div class="foot-brand">
+      <a class="logo" href="/">${icons.logo}<span>i<b>game9</b></span></a>
+      <p>${esc(site.description)}</p>
     </div>
+    <div class="foot-rows">${cols}</div>
     <p class="foot-note">© ${year} ${esc(site.name)}. Game names mentioned on this site are trademarks of their respective owners and are used only to describe the games and genres covered. igame9 is an independent site; the playable games here are original browser games unless a page states that a game is embedded from its publisher.</p>
   </div>
 </footer>`;
