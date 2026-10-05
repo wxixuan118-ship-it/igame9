@@ -69,7 +69,7 @@ export function header(activeCat = '') {
   return `<header class="site-header">
   <div class="wrap">
     <a class="logo" href="/" aria-label="${esc(site.name)} home">${icons.logo}<span>i<b>game9</b></span></a>
-    <nav class="nav" aria-label="Game categories"><a href="/">All games</a>${links}</nav>
+    <nav class="nav" aria-label="Game categories"><a href="/">All games</a>${links}<a href="/directory/">Submit a game</a></nav>
   </div>
 </header>`;
 }
@@ -91,6 +91,7 @@ export function footer(pages) {
       <div>
         <a class="logo" href="/">${icons.logo}<span>i<b>game9</b></span></a>
         <p>${esc(site.description)}</p>
+        <p><a href="/directory/">Made a browser game? List it in the igame9 game directory →</a></p>
       </div>
       ${cols}
     </div>

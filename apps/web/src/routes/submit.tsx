@@ -1,9 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { gameCategories } from "@starter/db/schema/game";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc";
+import { asset } from "@/site";
 export const Route = createFileRoute("/submit")({
   validateSearch: z.object({ id: z.string().optional().catch(undefined) }),
   head: () => ({ meta: [{ title: "Submit your game" }] }),
@@ -54,7 +55,7 @@ function Submit() {
       <main className="panel">
         <h1>Submit your game</h1>
         <p>
-          Please <a href="/login">sign in</a> to submit a game.
+          Please <Link to="/login">sign in</Link> to submit a game.
         </p>
       </main>
     );
@@ -123,7 +124,7 @@ function Submit() {
               and on every edit.
             </p>
             {origin ? (
-              <img src="/badge.svg" alt="Featured on igame9" width={180} height={48} />
+              <img src={asset("/badge.svg")} alt="Featured on igame9" width={180} height={48} />
             ) : null}
             <textarea className="code" readOnly value={badge} rows={3} />
           </div>

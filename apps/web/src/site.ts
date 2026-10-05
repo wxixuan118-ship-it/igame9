@@ -1,4 +1,5 @@
-// Mirrors igame9.ai/data/site.mjs. Pages synced from the static site use the same values.
+import { DIRECTORY_BASE } from "@starter/env/base";
+// Mirrors static/data/site.mjs.
 export const site = {
   name: "igame9",
   url: (import.meta.env.VITE_SITE_URL as string | undefined) ?? "https://igame9.ai",
@@ -7,6 +8,10 @@ export const site = {
   themeColor: "#0b0d17",
 };
 export const abs = (path: string) => site.url.replace(/\/$/, "") + path;
-/** Static igame9 pages live at "/<slug>/"; submitted games at "/games/<slug>". */
+/** A path inside the directory app, e.g. dir("/games") -> "/directory/games". */
+export const dir = (path = "/") => DIRECTORY_BASE + path;
+/** Root-relative static assets (CSS, thumbnails) come from the directory's own synced copy. */
+export const asset = (path: string) => (path.startsWith("/") ? dir(path) : path);
+/** Our games live on the games site at "/<slug>/"; submitted games at "/directory/games/<slug>". */
 export const gameHref = (g: { slug: string; url: string }) =>
-  g.url.startsWith("/") ? g.url : `/games/${g.slug}`;
+  g.url.startsWith("/") ? g.url : dir(`/games/${g.slug}`);

@@ -18,8 +18,10 @@
     "sync:static": "pnpm --dir packages/db exec tsx scripts/sync-static-games.ts",
     "db:generate": "pnpm --dir packages/db db:generate",
     "db:migrate": "pnpm --dir packages/db db:migrate",
-    "build:prod": "pnpm sync:static --files && pnpm --filter web build",
-    "start": "pnpm db:migrate && pnpm sync:static --db && node apps/web/.output/server/index.mjs"
+    "build:prod": "pnpm sync:static --files && pnpm --filter web build && node static/build.mjs",
+    "start:games": "node static/serve.mjs",
+    "start:directory": "pnpm db:migrate && pnpm sync:static --db && node apps/web/.output/server/index.mjs",
+    "start": "if [ \"$SERVICE\" = directory ]; then pnpm start:directory; else pnpm start:games; fi"
   },
   "devDependencies": {
     "@starter/config": "workspace:*",

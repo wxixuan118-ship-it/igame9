@@ -3,7 +3,7 @@ import { categoryInfo, type GameCategory } from "@starter/db/schema/game";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getGame } from "@/functions/games";
-import { abs } from "@/site";
+import { abs, asset, dir } from "@/site";
 export const Route = createFileRoute("/games/$slug")({
   loader: async ({ params }) => {
     const row = await getGame({ data: { slug: params.slug } });
@@ -21,10 +21,10 @@ export const Route = createFileRoute("/games/$slug")({
             { property: "og:type", content: "website" },
             { property: "og:title", content: g.title },
             { property: "og:description", content: g.summary },
-            { property: "og:url", content: abs(`/games/${g.slug}`) },
+            { property: "og:url", content: abs(dir(`/games/${g.slug}`)) },
             ...(g.thumbnailUrl ? [{ property: "og:image", content: g.thumbnailUrl }] : []),
           ],
-          links: [{ rel: "canonical", href: abs(`/games/${g.slug}`) }],
+          links: [{ rel: "canonical", href: abs(dir(`/games/${g.slug}`)) }],
           scripts: [
             {
               type: "application/ld+json",
@@ -33,12 +33,17 @@ export const Route = createFileRoute("/games/$slug")({
                   "@context": "https://schema.org",
                   "@type": "BreadcrumbList",
                   itemListElement: [
-                    { "@type": "ListItem", position: 1, name: "Games", item: abs("/") },
+                    {
+                      "@type": "ListItem",
+                      position: 1,
+                      name: "Game directory",
+                      item: abs(dir("/")),
+                    },
                     {
                       "@type": "ListItem",
                       position: 2,
                       name: g.title,
-                      item: abs(`/games/${g.slug}`),
+                      item: abs(dir(`/games/${g.slug}`)),
                     },
                   ],
                 },
@@ -70,8 +75,8 @@ function GamePage() {
   return (
     <main id="main" className="wrap page">
       <nav className="crumbs" aria-label="Breadcrumb">
-        <a href="/">Games</a> ›{" "}
-        <a href={`/games?category=${g.category}`}>{cat?.name ?? g.category}</a>
+        <a href={dir("/")}>Game directory</a> ›{" "}
+        <a href={dir(`/games?category=${g.category}`)}>{cat?.name ?? g.category}</a>
       </nav>
       <h1>{g.title}</h1>
       <p className="section-intro">
@@ -91,7 +96,7 @@ function GamePage() {
         </div>
       ) : (
         <img
-          src={g.thumbnailUrl ?? "/thumb-fallback.svg"}
+          src={asset(g.thumbnailUrl ?? "/thumb-fallback.svg")}
           alt={`${g.title} game preview`}
           width={640}
           height={360}
@@ -111,7 +116,7 @@ function GamePage() {
       {g.tags.length ? (
         <div className="chips">
           {g.tags.map((t) => (
-            <a key={t} className="chip" href={`/games?tag=${encodeURIComponent(t)}`}>
+            <a key={t} className="chip" href={dir(`/games?tag=${encodeURIComponent(t)}`)}>
               #{t}
             </a>
           ))}

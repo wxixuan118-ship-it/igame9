@@ -76,33 +76,48 @@ pnpm dev
 
 ## igame9 结构与部署
 
-本仓库是 monorepo：根目录是游戏目录站（前台 `apps/web`、后台 `apps/admin`），`static/` 是原 igame9 静态游戏页（每个关键词一个页面，自带构建脚本）。
+一个仓库，两个独立部署，共用 igame9.ai 一个域名：
 
-```bash
-pnpm sync:static           # 本地：构建 static/，把游戏页复制进 apps/web/public 并写入数据库
-pnpm sync:static --files   # 只复制文件（Docker 构建时用，不需要数据库）
-pnpm sync:static --db      # 只写数据库（容器启动时用）
+```text
+igame9.ai/                 游戏站：static/（我们自己的游戏，静态页面）
+igame9.ai/directory/...    目录站：apps/web（开发者提交游戏、付费推荐），由游戏站转发到目录站部署
 ```
 
-静态页仍在 `/<slug>/` 原样输出（页头注入 Submit 链接），在 `game` 表里记为 plan=own；描述少于 50 字的半成品页会被跳过。静态站的首页、sitemap、robots 不复制，由本应用动态生成。新增或修改游戏页：改 `static/data/pages/*.mjs`，提交后部署会自动同步。
+- 游戏站 `static/serve.mjs` 把 `/directory/*` 转发给 `DIRECTORY_ORIGIN`（目录站部署的地址）。目录站挂了也不影响游戏站。
+- 目录站固定运行在 `/directory` 路径下（`packages/env/src/base.ts`）。它会复制游戏站的 CSS 和缩略图保持同一外观，并把 `static/` 的游戏写入 `game` 表（plan=own，链接到 `/<slug>/`），作为“igame9 originals”展示。
+- 新增或修改自家游戏：改 `static/data/pages/*.mjs`，推送后两个部署都会更新。
 
-数据库结构变更：改 `packages/db/src/schema` 后运行 `pnpm db:generate` 生成迁移文件并提交；生产容器启动时 `pnpm db:migrate` 只应用新迁移。
+```bash
+pnpm sync:static           # 本地：同步游戏站资源 + 写入数据库
+pnpm db:generate           # 改了 packages/db/src/schema 后生成迁移文件（需提交）
+```
+
+本地联调：目录站 `pnpm --filter web dev`（http://localhost:3001/directory/），游戏站 `DIRECTORY_ORIGIN=http://localhost:3001 node static/serve.mjs 4180 --dev`，然后访问 http://localhost:4180。`BETTER_AUTH_URL` 设成浏览器访问的地址（经转发时为 http://localhost:4180）。
 
 ### AnySites 部署
 
-仓库自带 `Dockerfile`：构建时同步静态页并构建前台，启动时执行迁移、同步游戏表、在 3000 端口启动。推送到 `main` 即自动部署。必需环境变量：
+两个 AnySites 项目都连这个仓库的 `main` 分支，使用同一个 `Dockerfile`，用环境变量 `SERVICE` 区分。推送 `main` 两个都会自动部署。
+
+**游戏站项目**（绑定 igame9.ai，`SERVICE` 不设置）：
 
 | 变量 | 说明 |
 | --- | --- |
-| `DATABASE_URL` | AnySites 分配的 PostgreSQL |
+| `DIRECTORY_ORIGIN` | 目录站项目的平台地址，如 `https://igame9-directory-xxxx.anysites.app`；不设置则 `/directory` 返回 404 |
+
+**目录站项目**（`SERVICE=directory`，不需要绑定域名）：
+
+| 变量 | 说明 |
+| --- | --- |
+| `SERVICE` | `directory` |
+| `DATABASE_URL` | AnySites 分配的 PostgreSQL；启动时自动执行迁移 |
+| `BETTER_AUTH_URL` | 用户访问的域名，如 `https://igame9.ai`（不带 /directory） |
 | `BETTER_AUTH_SECRET` | 32 位以上随机字符串 |
-| `BETTER_AUTH_URL` | 站点地址，如 `https://igame9.ai` |
-| `TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET` / `TURNSTILE_HOSTNAMES` | Cloudflare Turnstile，hostnames 填站点域名 |
+| `TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET` / `TURNSTILE_HOSTNAMES` | Cloudflare Turnstile，hostnames 填 `igame9.ai` |
 | `ADMIN_EMAILS` | 管理员邮箱 |
-| `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | Stripe；Webhook 地址 `/api/webhooks/stripe`，事件 `checkout.session.completed`、`checkout.session.async_payment_succeeded`、`charge.refunded` |
+| `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | Stripe；Webhook 地址 `https://igame9.ai/directory/api/webhooks/stripe`，事件 `checkout.session.completed`、`checkout.session.async_payment_succeeded`、`charge.refunded` |
 | `FEATURED_LISTING_PRICE_USD` | 付费推荐收录价格（美元，默认 29） |
 
-可选：`GOOGLE_CLIENT_ID/SECRET`（Google 登录，后台登录也需要）、`RESEND_API_KEY/RESEND_FROM`（找回密码邮件）、`R2_*`（后台博客图片上传）。
+可选：`GOOGLE_CLIENT_ID/SECRET`（Google 登录；后台登录也需要）、`RESEND_API_KEY/RESEND_FROM`（找回密码邮件）、`R2_*`（后台博客图片上传）。
 
 ## 服务配置
 

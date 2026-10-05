@@ -9,11 +9,11 @@ import {
 import { categoryInfo } from "@starter/db/schema/game";
 import { getLocale } from "@/paraglide/runtime";
 import type { orpc } from "@/utils/orpc";
-import { site } from "@/site";
+import { asset, site } from "@/site";
 import staticAssets from "../static-assets.gen.json";
 import appCss from "../index.css?url";
 type RouterContext = { orpc: typeof orpc; queryClient: QueryClient };
-/** Header categories are the static site's seven; submitted-only categories live on /games. */
+/** Header mirrors the games site: its seven categories link to the games hub at "/". */
 const headerCategories = (
   ["idle", "racing", "runner", "puzzle", "strategy", "stickman", "action"] as const
 ).map((key) => [key, categoryInfo[key]] as const);
@@ -44,10 +44,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       { property: "og:site_name", content: site.name },
     ],
     links: [
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "manifest", href: "/site.webmanifest" },
-      // Shared with the static game pages (synced into public/ by `pnpm sync:static`).
-      { rel: "stylesheet", href: `/assets/css/site.css?v=${staticAssets.version}` },
+      { rel: "icon", href: asset("/favicon.svg"), type: "image/svg+xml" },
+      // The games site's stylesheet (synced into public/ by `pnpm sync:static --files`).
+      { rel: "stylesheet", href: asset(`/assets/css/site.css?v=${staticAssets.version}`) },
       { rel: "stylesheet", href: appCss },
     ],
     scripts:
@@ -87,6 +86,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
                   {c.short}
                 </a>
               ))}
+              <Link to="/">Directory</Link>
               <Link to="/submit">Submit</Link>
               <Link to="/app">My games</Link>
             </nav>
@@ -110,7 +110,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
                 <ul>
                   {headerCategories.map(([key, c]) => (
                     <li key={key}>
-                      <a href={`/games?category=${key}`}>{c.name}</a>
+                      <a href={`/#${key}`}>{c.name}</a>
                     </li>
                   ))}
                 </ul>
@@ -118,6 +118,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
               <div>
                 <h2>Developers</h2>
                 <ul>
+                  <li>
+                    <Link to="/">Game directory</Link>
+                  </li>
                   <li>
                     <Link to="/submit">Submit a game</Link>
                   </li>

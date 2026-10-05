@@ -7,6 +7,7 @@ import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { QueryClient } from "@tanstack/react-query";
 import { createIsomorphicFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
+import { DIRECTORY_BASE } from "@starter/env/base";
 export const createQueryClient = () =>
   new QueryClient({ defaultOptions: { queries: { staleTime: 60000 } } });
 const getClient = createIsomorphicFn()
@@ -16,7 +17,7 @@ const getClient = createIsomorphicFn()
   .client((): RouterClient<typeof appRouter> =>
     createORPCClient(
       new RPCLink({
-        url: `${window.location.origin}/api/rpc`,
+        url: `${window.location.origin}${DIRECTORY_BASE}/api/rpc`,
         fetch: (url, options) => fetch(url, { ...options, credentials: "include" }),
       }),
     ),

@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { env } from "@starter/env/server";
 import { db } from "@starter/db";
 import { game, gameCategories } from "@starter/db/schema/game";
 import { and, arrayContains, desc, eq } from "drizzle-orm";
@@ -19,14 +20,15 @@ const published = eq(game.status, "published");
 const order = [desc(game.featured), desc(game.rank), desc(game.publishedAt)];
 // ponytail: the hub renders every published game in one page (like the static hub did); cap at 500
 // and move to per-category paging once the catalog is bigger than that.
-export const listHomeGames = createServerFn({ method: "GET" }).handler(() =>
-  db
+export const getDirectoryHome = createServerFn({ method: "GET" }).handler(async () => ({
+  games: await db
     .select({ ...card, rank: game.rank, publishedAt: game.publishedAt })
     .from(game)
     .where(published)
     .orderBy(...order)
     .limit(500),
-);
+  featuredPriceUsd: env.FEATURED_LISTING_PRICE_USD,
+}));
 export const listGames = createServerFn({ method: "GET" })
   .validator(
     z.object({ category: z.enum(gameCategories).optional(), tag: z.string().max(60).optional() }),

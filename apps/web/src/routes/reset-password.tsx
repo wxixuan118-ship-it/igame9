@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createAuthClient } from "better-auth/react";
+import { dir } from "@/site";
 import { useState } from "react";
-const authClient = createAuthClient();
+const authClient = createAuthClient({ basePath: dir("/api/auth") });
 function Reset() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");

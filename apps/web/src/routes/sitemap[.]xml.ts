@@ -2,7 +2,8 @@ import { db } from "@starter/db";
 import { blogPost } from "@starter/db/schema/blog";
 import { game } from "@starter/db/schema/game";
 import { env } from "@starter/env/server";
-import { eq } from "drizzle-orm";
+import { DIRECTORY_BASE } from "@starter/env/base";
+import { and, eq, ne } from "drizzle-orm";
 import { createFileRoute } from "@tanstack/react-router";
 function escape(value: string) {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll('"', "&quot;");
@@ -16,18 +17,15 @@ export const Route = createFileRoute("/sitemap.xml")({
           .from(blogPost)
           .where(eq(blogPost.status, "published"));
         const games = await db
-          .select({ slug: game.slug, url: game.url })
+          .select({ slug: game.slug })
           .from(game)
-          .where(eq(game.status, "published"));
-        const origin = env.BETTER_AUTH_URL.replace(/\/$/, "");
+          // Our own games are listed in the games site's sitemap (igame9.ai/sitemap.xml).
+          .where(and(eq(game.status, "published"), ne(game.plan, "own")));
+        const origin = env.BETTER_AUTH_URL.replace(/\/$/, "") + DIRECTORY_BASE;
         const entries = [
           "/",
-          "/blog",
           "/games",
-          // Static igame9 pages live at "/<slug>/"; submitted games at "/games/<slug>".
-          ...games.map((g) =>
-            g.url.startsWith("/") ? g.url : `/games/${encodeURIComponent(g.slug)}`,
-          ),
+          ...games.map((g) => `/games/${encodeURIComponent(g.slug)}`),
           ...posts.map((p) => `/${p.locale}/blog/${encodeURIComponent(p.slug)}`),
         ];
         return new Response(

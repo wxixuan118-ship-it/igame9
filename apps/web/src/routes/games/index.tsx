@@ -3,7 +3,7 @@ import { categoryInfo, gameCategories } from "@starter/db/schema/game";
 import { z } from "zod";
 import { GameGrid } from "@/components/game-card";
 import { listGames } from "@/functions/games";
-import { abs } from "@/site";
+import { abs, dir } from "@/site";
 const search = z.object({
   category: z.enum(gameCategories).optional().catch(undefined),
   tag: z.string().max(60).optional().catch(undefined),
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/games/")({
   head: ({ match }) => {
     const { category, tag } = match.search;
     const name = category ? categoryInfo[category].h2 : tag ? `${tag} games` : "All games";
-    const canonical = abs(category ? `/games?category=${category}` : "/games");
+    const canonical = abs(dir(category ? `/games?category=${category}` : "/games"));
     return {
       meta: [
         { title: `${name} – Play free online | igame9` },
@@ -46,13 +46,13 @@ function Games() {
         aria-label="Categories"
         style={{ margin: "16px 0 24px" }}
       >
-        <a href="/games" aria-current={!category && !tag ? "page" : undefined}>
+        <a href={dir("/games")} aria-current={!category && !tag ? "page" : undefined}>
           All
         </a>
         {gameCategories.map((c) => (
           <a
             key={c}
-            href={`/games?category=${c}`}
+            href={dir(`/games?category=${c}`)}
             aria-current={category === c ? "page" : undefined}
           >
             {categoryInfo[c].icon} {categoryInfo[c].short}

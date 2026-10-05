@@ -188,7 +188,11 @@ async function main() {
   }
   fs.writeFileSync(path.join(DIST, '404.html'), render404(pages, assetVersion));
   fs.writeFileSync(path.join(DIST, 'sitemap.xml'), sitemap(pages));
-  fs.writeFileSync(path.join(DIST, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${abs('/sitemap.xml')}\n`);
+  // /directory is the game directory app (separate deployment, proxied by serve.mjs) with its own sitemap.
+  fs.writeFileSync(
+    path.join(DIST, 'robots.txt'),
+    `User-agent: *\nAllow: /\nDisallow: /directory/app\nDisallow: /directory/api/\n\nSitemap: ${abs('/sitemap.xml')}\nSitemap: ${abs('/directory/sitemap.xml')}\n`
+  );
   fs.writeFileSync(path.join(DIST, 'favicon.svg'), favicon);
   // Cache rules for Cloudflare Pages / Netlify (_headers). CSS/JS URLs carry ?v=<hash>.
   fs.writeFileSync(

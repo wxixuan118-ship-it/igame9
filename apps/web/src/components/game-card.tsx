@@ -1,5 +1,5 @@
 import { categoryInfo } from "@starter/db/schema/game";
-import { gameHref } from "@/site";
+import { asset, gameHref } from "@/site";
 export type GameCardData = {
   id: string;
   slug: string;
@@ -25,7 +25,7 @@ export function GameCard({ game: g, badge }: { game: GameCardData; badge?: strin
     >
       <img
         className="thumb"
-        src={g.thumbnailUrl ?? "/thumb-fallback.svg"}
+        src={asset(g.thumbnailUrl ?? "/thumb-fallback.svg")}
         alt={`${g.title} game preview`}
         width={640}
         height={360}

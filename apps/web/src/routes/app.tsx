@@ -19,7 +19,7 @@ function App() {
   if (me.isError)
     return (
       <main className="panel">
-        <a href="/login">Sign in</a>
+        <Link to="/login">Sign in</Link>
       </main>
     );
   return (

@@ -2,6 +2,7 @@ import { db } from "@starter/db";
 import * as schema from "@starter/db/schema/auth";
 import { user } from "@starter/db/schema/auth";
 import { env } from "@starter/env/server";
+import { DIRECTORY_BASE } from "@starter/env/base";
 import { eq } from "drizzle-orm";
 import { APIError } from "better-auth/api";
 import { betterAuth } from "better-auth";
@@ -18,6 +19,7 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: "pg", schema }),
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
+  basePath: `${DIRECTORY_BASE}/api/auth`,
   trustedOrigins: [env.BETTER_AUTH_URL],
   socialProviders:
     env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET

@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { createAuthClient } from "better-auth/react";
+import { dir } from "@/site";
 import { getAuthConfig } from "@/functions/auth-config";
 import { m } from "@/paraglide/messages";
-const authClient = createAuthClient();
+const authClient = createAuthClient({ basePath: dir("/api/auth") });
 type TurnstileApi = {
   render: (
     element: HTMLElement,
@@ -67,12 +68,12 @@ function Login() {
           : mode === "signup"
             ? await authClient.signUp.email({ email, password, name }, { headers })
             : await authClient.requestPasswordReset(
-                { email, redirectTo: `${location.origin}/reset-password` },
+                { email, redirectTo: `${location.origin}${dir("/reset-password")}` },
                 { headers },
               );
       if (result.error) throw new Error(result.error.message);
       if (mode === "reset") setMessage("Check your email.");
-      else location.href = "/app";
+      else location.href = dir("/app");
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -132,7 +133,9 @@ function Login() {
         <p>
           <button
             className="button"
-            onClick={() => authClient.signIn.social({ provider: "google", callbackURL: "/app" })}
+            onClick={() =>
+              authClient.signIn.social({ provider: "google", callbackURL: dir("/app") })
+            }
           >
             {m["auth.google"]()}
           </button>

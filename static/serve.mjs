@@ -1,7 +1,10 @@
 // Static server for dist/ — used in production (npm start) and for local preview.
 //   node serve.mjs [port] [--dir path] [--dev]
 // Port: argument, else $PORT, else 3000. --dev disables caching for local iteration.
+// /directory/* is reverse-proxied to the game directory app (a separate deployment) when
+// DIRECTORY_ORIGIN is set, e.g. DIRECTORY_ORIGIN=https://igame9-directory.anysites.app
 import http from 'node:http';
+import https from 'node:https';
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
@@ -13,6 +16,8 @@ const DIST = dirArg > -1 ? path.resolve(args[dirArg + 1]) : path.join(path.dirna
 const portArg = args.find((a) => /^\d+$/.test(a));
 const PORT = Number(portArg || process.env.PORT || 3000);
 const DEV = args.includes('--dev');
+const DIRECTORY = '/directory';
+const DIRECTORY_ORIGIN = process.env.DIRECTORY_ORIGIN ? new URL(process.env.DIRECTORY_ORIGIN) : null;
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -56,8 +61,49 @@ function resolveFile(urlPath) {
   return file;
 }
 
+// Streams the request to the directory app and its response back; same-domain URLs for both sites.
+function proxyDirectory(req, res) {
+  const upstream = DIRECTORY_ORIGIN;
+  const headers = {
+    ...req.headers,
+    host: upstream.host,
+    'x-forwarded-host': req.headers.host || '',
+    'x-forwarded-proto': req.headers['x-forwarded-proto'] || (req.socket.encrypted ? 'https' : 'http'),
+  };
+  const upReq = (upstream.protocol === 'https:' ? https : http).request(
+    {
+      protocol: upstream.protocol,
+      hostname: upstream.hostname,
+      port: upstream.port || undefined,
+      method: req.method,
+      path: req.url,
+      headers,
+    },
+    (upRes) => {
+      const out = { ...upRes.headers };
+      // Absolute redirects that point at the directory's own host become same-domain paths.
+      if (typeof out.location === 'string' && out.location.startsWith(upstream.origin))
+        out.location = out.location.slice(upstream.origin.length) || '/';
+      res.writeHead(upRes.statusCode || 502, out);
+      upRes.pipe(res);
+    }
+  );
+  upReq.setTimeout(30000, () => upReq.destroy(new Error('directory timeout')));
+  upReq.on('error', (err) => {
+    console.error('[directory proxy]', err.message);
+    if (!res.headersSent) res.writeHead(502, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.end('The game directory is temporarily unavailable.');
+  });
+  req.pipe(upReq);
+}
+
 http
   .createServer((req, res) => {
+    const pathOnly = (req.url || '/').split('?')[0];
+    if (DIRECTORY_ORIGIN && (pathOnly === DIRECTORY || pathOnly.startsWith(DIRECTORY + '/'))) {
+      proxyDirectory(req, res);
+      return;
+    }
     if (req.method !== 'GET' && req.method !== 'HEAD') {
       res.writeHead(405, { Allow: 'GET, HEAD' }).end();
       return;

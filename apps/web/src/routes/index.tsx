@@ -1,83 +1,68 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { categoryInfo, type GameCategory } from "@starter/db/schema/game";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GameCard } from "@/components/game-card";
-import { listHomeGames } from "@/functions/games";
-import { abs, gameHref, site } from "@/site";
-const title = "Free Online Games — Play Instantly, No Download | igame9";
-const faq: [string, string][] = [
+import { getDirectoryHome } from "@/functions/games";
+import { abs, asset, dir, site } from "@/site";
+const title = "Submit Your Browser Game — igame9 Game Directory";
+const description =
+  "List your HTML5 or browser game on igame9: free with our badge after review, or a featured listing with a homepage spot and a followed link that goes live as soon as you pay.";
+const faq = (price: string): [string, string][] => [
   [
-    "Are the games on igame9 free?",
-    "Yes. Every game is free to play in your browser. Our own games need no account, no download and have no in-game purchases; listings from other developers link to or embed their own free browser games.",
+    "How do I list my game for free?",
+    "Sign in, add the igame9 badge to the exact page where your game is played, then submit that URL. We check the page for a followed link back to igame9 and review your listing by hand, usually within a few days.",
   ],
   [
-    "Do these games work on Chromebooks, phones and tablets?",
-    "They are lightweight HTML5 games that run in any modern browser. Our own games support mouse and keyboard, and touch controls on phones and tablets.",
+    "What does a featured listing include?",
+    `A one-time payment of $${price}. Your game goes live right after payment, appears in the featured section of the directory, and links to your site with a followed (dofollow) link.`,
   ],
   [
-    "Is my progress saved?",
-    "Best scores and idle-game progress are stored locally in your browser. Clearing site data or using a private window resets them.",
+    "Is the link on a free listing followed?",
+    "No. Free listings use a nofollow ugc link. Featured listings and our own games use a followed link.",
   ],
   [
-    "Do I need to create an account?",
-    "Not to play. An account is only needed if you are a developer submitting your own game to the directory.",
+    "Can players play my game on igame9?",
+    "Yes, if you add an embed URL and confirm you own the game or have permission to embed it. Otherwise the listing links straight to your site.",
   ],
   [
-    "How do I play in fullscreen?",
-    "Click the fullscreen button in the bar under any game. The game and its toolbar fill the screen; press the same button (or Esc) to return to the page.",
+    "What if my game is rejected?",
+    "You will see the reason under My games. Edit the listing and resubmit it; a featured listing keeps its perks. If we cannot list a paid game at all, contact us for a refund.",
   ],
   [
-    "Are these the official versions of the games?",
-    "Our own games are original browser games built in the style of the titles people search for, and each page explains how the original works and who made it. Games submitted by developers are their own work, listed with a link back to their site.",
-  ],
-  [
-    "Can I add my game to igame9?",
-    "Yes. Sign in and submit it: a free listing goes live after review once our badge is on your game page, or a featured listing goes live right after payment with a homepage spot.",
+    "What kind of games do you accept?",
+    "Free-to-play browser games that load without a download. We do not list games that copy someone else's work, contain malware or adult content, or mislead players.",
   ],
 ];
 export const Route = createFileRoute("/")({
-  loader: () => listHomeGames(),
-  head: ({ loaderData: games = [] }) => ({
+  loader: () => getDirectoryHome(),
+  head: ({ loaderData }) => ({
     meta: [
       { title },
-      { name: "description", content: site.description },
-      { name: "robots", content: "index, follow, max-image-preview:large" },
+      { name: "description", content: description },
       { property: "og:type", content: "website" },
       { property: "og:title", content: title },
-      { property: "og:description", content: site.description },
-      { property: "og:url", content: abs("/") },
-      { property: "og:image", content: abs("/assets/img/og/hub.png") },
+      { property: "og:description", content: description },
+      { property: "og:url", content: abs(dir("/")) },
+      { property: "og:image", content: abs(asset("/assets/img/og/hub.png")) },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: abs("/") }],
+    links: [{ rel: "canonical", href: abs(dir("/")) }],
     scripts: [
       {
         type: "application/ld+json",
         children: JSON.stringify([
           {
             "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: site.name,
-            url: abs("/"),
-            description: site.description,
-            inLanguage: "en",
-          },
-          {
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            name: "Free browser games on igame9",
-            numberOfItems: games.length,
-            itemListElement: games.map((g, i) => ({
-              "@type": "ListItem",
-              position: i + 1,
-              url: abs(gameHref(g)),
-              name: g.title,
-            })),
+            "@type": "CollectionPage",
+            name: "igame9 game directory",
+            url: abs(dir("/")),
+            description,
+            isPartOf: { "@type": "WebSite", name: site.name, url: abs("/") },
           },
           {
             "@context": "https://schema.org",
             "@type": "FAQPage",
-            mainEntity: faq.map(([q, a]) => ({
+            mainEntity: faq(loaderData?.featuredPriceUsd ?? "").map(([q, a]) => ({
               "@type": "Question",
               name: q,
               acceptedAnswer: { "@type": "Answer", text: a },
@@ -90,58 +75,48 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 function Home() {
-  const games = Route.useLoaderData();
+  const { games, featuredPriceUsd } = Route.useLoaderData();
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<string>("all");
   const categories = (Object.keys(categoryInfo) as GameCategory[]).filter((key) =>
     games.some((g) => g.category === key),
   );
-  // Deep links like /#racing (used by every static game page header) preselect that category.
-  useEffect(() => {
-    const fromHash = () => {
-      const h = location.hash.slice(1);
-      if (!categories.includes(h as GameCategory)) return;
-      setFilter(h);
-      // The browser already jumped to the anchor in the full page; re-align once the filter collapses it.
-      requestAnimationFrame(() => document.getElementById(h)?.scrollIntoView());
-    };
-    fromHash();
-    addEventListener("hashchange", fromHash);
-    return () => removeEventListener("hashchange", fromHash);
-  }, [categories.join()]);
-  const popular = games
-    .filter((g) => g.plan === "own")
-    .sort((a, b) => b.rank - a.rank)
-    .slice(0, 8);
   const featured = games.filter((g) => g.plan !== "own" && g.featured);
   const fresh = games
     .filter((g) => g.plan !== "own" && !g.featured)
     .sort((a, b) => +new Date(b.publishedAt ?? 0) - +new Date(a.publishedAt ?? 0))
+    .slice(0, 12);
+  const originals = games
+    .filter((g) => g.plan === "own")
+    .sort((a, b) => b.rank - a.rank)
     .slice(0, 8);
   const terms = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-  const hits = terms.length
-    ? games.filter(
-        (g) =>
-          (filter === "all" || g.category === filter) &&
-          terms.every((t) =>
-            [g.title, ...g.tags, categoryInfo[g.category as GameCategory]?.name ?? ""]
-              .join(" ")
-              .toLowerCase()
-              .includes(t),
-          ),
-      )
-    : [];
-  const all = filter === "all" && !terms.length;
+  const hits = games.filter(
+    (g) =>
+      (filter === "all" || g.category === filter) &&
+      terms.every((t) =>
+        [g.title, ...g.tags, categoryInfo[g.category as GameCategory]?.name ?? ""]
+          .join(" ")
+          .toLowerCase()
+          .includes(t),
+      ),
+  );
+  const browsing = filter !== "all" || terms.length > 0;
   return (
     <main id="main" className="wrap">
       <section className="hub-hero">
         <h1>
-          Free online games you can <span>play instantly</span>
+          The igame9 <span>game directory</span>
         </h1>
         <p>
-          {games.length} free online games — tower defense, stickman fights, idle tycoons,
-          cliff-edge drifting, temple runners, two-layer mahjong, merge and physics puzzles — no
-          download, no login, on desktop, Chromebook and mobile.
+          A directory of free browser games from independent developers. Made a game? List it here
+          and get it in front of players — free with our badge, or featured with a followed link.
+        </p>
+        <p className="row" style={{ justifyContent: "center" }}>
+          <Link to="/submit" className="button">
+            Submit your game
+          </Link>
+          <a href="#plans">Compare listings</a>
         </p>
         <div className="search" role="search">
           <svg
@@ -156,12 +131,12 @@ function Home() {
             <path d="M20 20l-3.5-3.5" />
           </svg>
           <label className="sr-only" htmlFor="q">
-            Search games
+            Search the directory
           </label>
           <input
             id="q"
             type="search"
-            placeholder={`Search ${games.length} games, e.g. drift, idle, temple run…`}
+            placeholder={`Search ${games.length} games…`}
             autoComplete="off"
             value={q}
             onChange={(e) => setQ(e.target.value)}
@@ -179,171 +154,104 @@ function Home() {
             </button>
           ))}
         </div>
-        <div className="stats">
-          <span>
-            <b>{games.length}</b>games
-          </span>
-          <span>
-            <b>{categories.length}</b>categories
-          </span>
-          <span>
-            <b>0</b>downloads needed
-          </span>
-        </div>
       </section>
 
-      {terms.length ? (
-        <div id="results">
+      {browsing ? (
+        <section aria-labelledby="h-results">
           <div className="section-head">
-            <p className="section-title">Search results</p>
+            <h2 id="h-results">
+              {terms.length
+                ? "Search results"
+                : `${categoryInfo[filter as GameCategory].icon} ${categoryInfo[filter as GameCategory].h2}`}
+            </h2>
+            <span className="chip">{hits.length} games</span>
           </div>
           <div className="grid">
             {hits.map((g) => (
               <GameCard key={g.id} game={g} />
             ))}
           </div>
-          {!hits.length ? (
-            <p className="no-results">
-              No games match that search. Try “idle”, “drift” or “puzzle”.
-            </p>
+          {!hits.length ? <p className="no-results">No games match that search.</p> : null}
+        </section>
+      ) : (
+        <>
+          {featured.length ? (
+            <section aria-labelledby="h-featured">
+              <div className="section-head">
+                <h2 id="h-featured">⭐ Featured games</h2>
+              </div>
+              <div className="grid">
+                {featured.map((g) => (
+                  <GameCard key={g.id} game={g} badge="Featured" />
+                ))}
+              </div>
+            </section>
           ) : null}
-        </div>
-      ) : null}
+          <section aria-labelledby="h-new">
+            <div className="section-head">
+              <h2 id="h-new">🆕 New from independent developers</h2>
+            </div>
+            {fresh.length ? (
+              <div className="grid">
+                {fresh.map((g) => (
+                  <GameCard key={g.id} game={g} />
+                ))}
+              </div>
+            ) : (
+              <p className="section-intro">
+                Be the first: <Link to="/submit">submit your game</Link> and it will show up here.
+              </p>
+            )}
+          </section>
+          <section aria-labelledby="h-originals">
+            <div className="section-head">
+              <h2 id="h-originals">🎮 igame9 originals</h2>
+              <a className="chip" href="/">
+                All our games →
+              </a>
+            </div>
+            <p className="section-intro">Free browser games built by the igame9 team.</p>
+            <div className="grid">
+              {originals.map((g) => (
+                <GameCard key={g.id} game={g} badge="igame9 original" />
+              ))}
+            </div>
+          </section>
+        </>
+      )}
 
-      {all && featured.length ? (
-        <section aria-labelledby="h-featured">
-          <div className="section-head">
-            <h2 id="h-featured">⭐ Featured games from developers</h2>
-          </div>
-          <div className="grid">
-            {featured.map((g) => (
-              <GameCard key={g.id} game={g} badge="Featured" />
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      {all ? (
-        <section id="trending" aria-labelledby="h-trending">
-          <div className="section-head">
-            <h2 id="h-trending">🔥 Popular free online games</h2>
-          </div>
-          <p className="section-intro">
-            The games people search for most — start here if you just want something good to play.
-          </p>
-          <div className="grid">
-            {popular.map((g, i) => (
-              <GameCard key={g.id} game={g} badge={i < 3 ? "Popular" : ""} />
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      {!terms.length
-        ? categories
-            .filter((key) => filter === "all" || filter === key)
-            .map((key) => {
-              const c = categoryInfo[key];
-              const list = games.filter((g) => g.category === key);
-              return (
-                <section
-                  key={key}
-                  className="cat-section"
-                  id={key}
-                  data-cat={key}
-                  aria-labelledby={`h-${key}`}
-                >
-                  <div className="section-head">
-                    <h2 id={`h-${key}`}>
-                      {c.icon} {c.h2}
-                    </h2>
-                    <span className="chip">{list.length} games</span>
-                  </div>
-                  <p className="section-intro">{c.blurb}</p>
-                  <div className="grid">
-                    {list.map((g) => (
-                      <GameCard key={g.id} game={g} />
-                    ))}
-                  </div>
-                </section>
-              );
-            })
-        : null}
-
-      {all && fresh.length ? (
-        <section aria-labelledby="h-new">
-          <div className="section-head">
-            <h2 id="h-new">🆕 New from independent developers</h2>
-          </div>
-          <div className="grid">
-            {fresh.map((g) => (
-              <GameCard key={g.id} game={g} />
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      <section className="card-box hub-cta" style={{ marginTop: 48 }} aria-labelledby="h-submit">
-        <h2 id="h-submit">Made a browser game?</h2>
-        <p>
-          List it on igame9 for free with our badge, or get a featured spot on this page that goes
-          live as soon as you pay.
-        </p>
-        <Link to="/submit" className="button">
-          Submit your game
-        </Link>
-      </section>
-
-      <section aria-labelledby="h-about">
+      <section id="plans" aria-labelledby="h-plans" style={{ marginTop: 48 }}>
         <div className="section-head">
-          <h2 id="h-about">Why play free online games on igame9</h2>
-        </div>
-        <div className="hub-why">
-          <img
-            src="/assets/img/hub-devices.svg"
-            alt="Free online games on igame9 running on a laptop, a tablet and a phone"
-            width={640}
-            height={360}
-            loading="lazy"
-            decoding="async"
-          />
-          <div className="prose">
-            <p>
-              Most games here are small HTML5 games we build ourselves, so they start in a second or
-              two, keep working on a slow school or library connection and never ask you to install
-              anything. Each one is only a few dozen kilobytes.
-            </p>
-            <p>
-              Each of our games is inspired by a title people already love — Drift Boss, Temple Run,
-              Merge Dragons, IdleOn and more — and its page explains how the original works, who
-              made it and how our version differs, so you always know what you are playing.
-              Independent developers can list their own browser games here too.
-            </p>
-          </div>
+          <h2 id="h-plans">List your game</h2>
         </div>
         <div className="hub-about">
           <div className="card-box">
-            <h3>⚡ Free games that start instantly</h3>
+            <h3>Free listing</h3>
             <p>
-              Every game loads straight from the page. Nothing to install, no plugins and no sign-up
-              wall.
+              Add the igame9 badge to your game page. We verify the link and review your game by
+              hand, then list it with a nofollow link.
             </p>
           </div>
           <div className="card-box">
-            <h3>📱 Games for any device</h3>
+            <h3>⭐ Featured listing — ${featuredPriceUsd}</h3>
             <p>
-              Keyboard and mouse on desktop and Chromebook, tap and swipe on phones and tablets. Hit
-              fullscreen for the best view.
+              One-time payment. Goes live right after payment, gets a spot in the featured section
+              and a followed (dofollow) link to your site.
             </p>
           </div>
           <div className="card-box">
-            <h3>📖 A guide for every game</h3>
+            <h3>▶ Playable on igame9</h3>
             <p>
-              Each of our pages has controls, strategy tips and background on the original game, so
-              you know exactly how to get a higher score.
+              Add an embed URL and players can start your game right on its igame9 page, with a link
+              to your site for the full version.
             </p>
           </div>
         </div>
+        <p className="row" style={{ marginTop: 16 }}>
+          <Link to="/submit" className="button">
+            Submit your game
+          </Link>
+        </p>
       </section>
 
       <section
@@ -351,8 +259,8 @@ function Home() {
         aria-labelledby="h-faq"
         style={{ marginTop: 48, maxWidth: 860 }}
       >
-        <h2 id="h-faq">Free online games FAQ</h2>
-        {faq.map(([question, answer], i) => (
+        <h2 id="h-faq">Directory FAQ</h2>
+        {faq(featuredPriceUsd).map(([question, answer], i) => (
           <details key={question} open={i === 0}>
             <summary>{question}</summary>
             <div className="faq-a">

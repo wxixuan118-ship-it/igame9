@@ -3,6 +3,7 @@ import { payment, webhookEvent } from "@starter/db/schema/payment";
 import { user } from "@starter/db/schema/auth";
 import { game } from "@starter/db/schema/game";
 import { env } from "@starter/env/server";
+import { DIRECTORY_BASE } from "@starter/env/base";
 import { and, eq } from "drizzle-orm";
 import Stripe from "stripe";
 
@@ -19,7 +20,7 @@ export async function createListingCheckout(
   gameId: string,
   gameTitle: string,
 ) {
-  const origin = env.BETTER_AUTH_URL.replace(/\/$/, "");
+  const origin = env.BETTER_AUTH_URL.replace(/\/$/, "") + DIRECTORY_BASE;
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     customer_email: email,
