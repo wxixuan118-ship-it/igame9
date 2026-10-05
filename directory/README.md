@@ -97,27 +97,30 @@ pnpm db:generate           # 改了 packages/db/src/schema 后生成迁移文件
 
 ### AnySites 部署
 
-两个 AnySites 项目都连这个仓库的 `main` 分支，推送后都会自动部署。
+AnySites 的静态站项目不运行任何进程（只构建 `dist/` 交给 Caddy），也不支持按路径把请求分给不同项目，所以入口必须是一个 Node 项目。两个 Node.js 项目都连这个仓库的 `main` 分支，使用仓库根目录同一个 `Dockerfile`（镜像里同时构建游戏站和目录站），由运行时环境变量 `SERVICE` 决定启动哪一个。推送后都会自动部署。
 
-**游戏站项目**（现有项目，静态站类型，绑定 igame9.ai）：在仓库根目录 `npm install && npm start`，不读 Dockerfile。环境变量：
+**游戏站入口项目**（Node.js，绑定 igame9.ai，`SERVICE` 不设置）：运行 `serve.mjs` 提供游戏页，并把 `/directory/*` 转发给目录站项目。
 
 | 变量 | 说明 |
 | --- | --- |
 | `DIRECTORY_ORIGIN` | 目录站项目的平台地址，如 `https://igame9-directory-xxxx.anysites.app`；不设置时 `/directory` 跳回首页 |
 
-**目录站项目**（新建，Node.js 类型）：使用仓库根目录的 `Dockerfile`（构建 `directory/`），启动时自动执行迁移。环境变量：
+**目录站项目**（Node.js，不绑定域名）：
 
 | 变量 | 说明 |
 | --- | --- |
-| `DATABASE_URL` | AnySites 分配的 PostgreSQL |
-| `BETTER_AUTH_URL` | 用户访问的域名，如 `https://igame9.ai`（不带 /directory） |
+| `SERVICE` | `directory` |
+| `DATABASE_URL` | AnySites 分配的 PostgreSQL；启动时自动执行迁移 |
+| `BETTER_AUTH_URL` | 用户访问的域名，如 `https://igame9.ai`（不带 /directory）；绑定域名前先填游戏站入口项目的平台地址 |
 | `BETTER_AUTH_SECRET` | 32 位以上随机字符串 |
-| `TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET` / `TURNSTILE_HOSTNAMES` | Cloudflare Turnstile，hostnames 填 `igame9.ai` |
+| `TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET` / `TURNSTILE_HOSTNAMES` | Cloudflare Turnstile，hostnames 填访问域名 |
 | `ADMIN_EMAILS` | 管理员邮箱 |
 | `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` | Stripe；Webhook 地址 `https://igame9.ai/directory/api/webhooks/stripe`，事件 `checkout.session.completed`、`checkout.session.async_payment_succeeded`、`charge.refunded` |
 | `FEATURED_LISTING_PRICE_USD` | 付费推荐收录价格（美元，默认 29） |
 
 可选：`GOOGLE_CLIENT_ID/SECRET`（Google 登录；后台登录也需要）、`RESEND_API_KEY/RESEND_FROM`（找回密码邮件）、`R2_*`（后台博客图片上传）。
+
+原来的静态站项目（`igame9-12ca1e.anysites.app`）不读 Dockerfile，仍在仓库根目录 `npm run build` 发布纯静态游戏站，可作为备用，域名迁走后可删除。
 
 ## 服务配置
 
